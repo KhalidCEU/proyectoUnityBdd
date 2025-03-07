@@ -1,0 +1,30 @@
+# ========== MacOS files ==========
+.DS_Store
+*.app
+
+# ========== Unity generated files ==========
+[Ll]ibrary/
+[Tt]emp/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Ll]ogs/
+UserSettings/
+
+# ========== User-specific files ==========
+.vscode/
+.idea/
+*.suo
+*.user
+*.userprefs
+
+# ========== Build directories ==========
+Build/
+Builds/
+
+# ========== Unity preferences ==========
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
