@@ -22,7 +22,7 @@ INSERT INTO "Categories" ("Id", "Name") VALUES
 (9, 'Tennis Technology'),
 (10, 'Tennis Gifts');
 
-INSERT INTO "Stores" ("Id", "Adress", "ManagerId") VALUES
+INSERT INTO "Stores" ("Id", "Address", "ManagerId") VALUES
 (1, '123 Main St', 1),
 (2, '456 Elm St', 2),
 (3, '789 Oak St', 3),
@@ -58,7 +58,7 @@ INSERT INTO "Products" ("Id", "Name", "CategoryId", "Price", "Stock") VALUES
 (9, 'Tennis Ball Hopper', 9, 25.00, 75),
 (10, 'Tennis Gift Set', 10, 50.00, 100);
 
-INSERT INTO "Customers" ("Id", "Name", "Email", "PhoneNumber", "Adress") VALUES
+INSERT INTO "Customers" ("Id", "Name", "Email", "PhoneNumber", "Address") VALUES
 (1, 'Emily Cooper', 'emily.cooper@example.com', '123-456-7890', '789 Oak St'),
 (2, 'Benjamin Brown', 'benjamin.brown@example.com', '987-654-3210', '456 Pine St'),
 (3, 'Sophia Green', 'sophia.green@example.com', '555-123-4567', '101 Maple St'),

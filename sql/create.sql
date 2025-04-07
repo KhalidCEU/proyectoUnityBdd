@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS "Customers" (
 	"Name" TEXT CHECK (LENGTH(Name) <= 70),
 	"Email" TEXT CHECK (LENGTH(Email) <= 254),
 	"PhoneNumber" TEXT CHECK (LENGTH(PhoneNumber) <= 15),
-	"Adress" TEXT CHECK (LENGTH(Adress) <= 200)
+	"Address" TEXT CHECK (LENGTH(Address) <= 200)
 );
 
 CREATE TABLE IF NOT EXISTS "Orders" (
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS "Categories" (
 
 CREATE TABLE IF NOT EXISTS "Stores" (
 	"Id" INTEGER NOT NULL UNIQUE PRIMARY KEY,
-	"Adress" TEXT CHECK (LENGTH(Adress) <= 200),
+	"Address" TEXT CHECK (LENGTH(Address) <= 200),
 	"ManagerId" INTEGER REFERENCES Employees
 );
 
