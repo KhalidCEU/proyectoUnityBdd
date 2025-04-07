@@ -19,6 +19,10 @@ This course is part of the GITAV (Degree in Engineering for Animation and Video 
 
 **The Stack**: Unity for the front-end, MySQL as the database, C# as the language for both application logic and database interactions.
 
+## Documentation
+
+[Here](/doc/README.md) you can find a small documentation for our **database structure** and modelling.
+
 ## License 📃
 
 This project is licensed under the Apache 2.0 License - see the [LICENSE](/LICENSE) file for details.
