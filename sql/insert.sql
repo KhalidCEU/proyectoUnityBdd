@@ -1,0 +1,95 @@
+INSERT INTO "Positions" ("Id", "Name") VALUES
+(1, 'Manager'),
+(2, 'Salesperson'),
+(3, 'Cashier'),
+(4, 'Supervisor'),
+(5, 'Stock Clerk'),
+(6, 'Security'),
+(7, 'Assistant Manager'),
+(8, 'Marketing Specialist'),
+(9, 'Customer Service'),
+(10, 'IT Specialist');
+
+INSERT INTO "Categories" ("Id", "Name") VALUES
+(1, 'Tennis Rackets'),
+(2, 'Tennis Shoes'),
+(3, 'Tennis Balls'),
+(4, 'Tennis Apparel'),
+(5, 'Tennis Bags'),
+(6, 'Tennis Accessories'),
+(7, 'Tennis String'),
+(8, 'Tennis Grips'),
+(9, 'Tennis Technology'),
+(10, 'Tennis Gifts');
+
+INSERT INTO "Stores" ("Id", "Adress", "ManagerId") VALUES
+(1, '123 Main St', 1),
+(2, '456 Elm St', 2),
+(3, '789 Oak St', 3),
+(4, '101 Pine St', 4),
+(5, '202 Maple St', 5),
+(6, '303 Birch St', 6),
+(7, '404 Cedar St', 7),
+(8, '505 Willow St', 8),
+(9, '606 Cherry St', 9),
+(10, '707 Ash St', 10);
+
+INSERT INTO "Employees" ("Id", "Name", "PositionId", "Salary", "Email", "Photo", "StoreId") VALUES
+(1, 'Ethan Turner', 1, 50000, 'ethan.turner@example.com', NULL, 1),
+(2, 'Olivia Brown', 2, 30000, 'olivia.brown@example.com', NULL, 2),
+(3, 'Lucas Harris', 3, 25000, 'lucas.harris@example.com', NULL, 3),
+(4, 'Maya Wilson', 4, 35000, 'maya.wilson@example.com', NULL, 4),
+(5, 'Jack Davis', 5, 28000, 'jack.davis@example.com', NULL, 5),
+(6, 'Ella Clark', 6, 22000, 'ella.clark@example.com', NULL, 6),
+(7, 'Liam King', 7, 38000, 'liam.king@example.com', NULL, 7),
+(8, 'Sophia White', 8, 45000, 'sophia.white@example.com', NULL, 8),
+(9, 'James Scott', 9, 24000, 'james.scott@example.com', NULL, 9),
+(10, 'Ava Green', 10, 47000, 'ava.green@example.com', NULL, 10);
+
+INSERT INTO "Products" ("Id", "Name", "CategoryId", "Price", "Stock") VALUES
+(1, 'Wilson Pro Staff Racket', 1, 200.00, 50),
+(2, 'Adidas Barricade Shoes', 2, 120.00, 100),
+(3, 'Wilson Championship Tennis Balls', 3, 3.50, 500),
+(4, 'Nike Court Dry T-shirt', 4, 30.00, 150),
+(5, 'Head Tour Team Tennis Bag', 5, 80.00, 30),
+(6, 'Babolat RPM Blast Tennis String', 6, 15.00, 200),
+(7, 'Dunlop Overgrip', 7, 5.00, 250),
+(8, 'Yonex Super Grap Overgrip', 8, 6.00, 200),
+(9, 'Tennis Ball Hopper', 9, 25.00, 75),
+(10, 'Tennis Gift Set', 10, 50.00, 100);
+
+INSERT INTO "Customers" ("Id", "Name", "Email", "PhoneNumber", "Adress") VALUES
+(1, 'Emily Cooper', 'emily.cooper@example.com', '123-456-7890', '789 Oak St'),
+(2, 'Benjamin Brown', 'benjamin.brown@example.com', '987-654-3210', '456 Pine St'),
+(3, 'Sophia Green', 'sophia.green@example.com', '555-123-4567', '101 Maple St'),
+(4, 'Lucas White', 'lucas.white@example.com', '555-234-5678', '202 Birch St'),
+(5, 'Mason Black', 'mason.black@example.com', '555-345-6789', '303 Cedar St'),
+(6, 'Amelia Blue', 'amelia.blue@example.com', '555-456-7890', '404 Elm St'),
+(7, 'Charlotte Pink', 'charlotte.pink@example.com', '555-567-8901', '505 Oak St'),
+(8, 'Jack Red', 'jack.red@example.com', '555-678-9012', '606 Pine St'),
+(9, 'Ella Yellow', 'ella.yellow@example.com', '555-789-0123', '707 Maple St'),
+(10, 'Aiden Purple', 'aiden.purple@example.com', '555-890-1234', '808 Birch St');
+
+INSERT INTO "Orders" ("Id", "Date", "CustomerId", "TotalAmount") VALUES
+(1, '2025-04-01', 1, 500.00),
+(2, '2025-04-02', 2, 240.00),
+(3, '2025-04-03', 3, 150.00),
+(4, '2025-04-04', 4, 350.00),
+(5, '2025-04-05', 5, 120.00),
+(6, '2025-04-06', 6, 30.00),
+(7, '2025-04-07', 7, 500.00),
+(8, '2025-04-08', 8, 450.00),
+(9, '2025-04-09', 9, 75.00),
+(10, '2025-04-10', 10, 500.00);
+
+INSERT INTO "ProductOrders" ("OrderId", "ProductId", "Quantity", "PriceAtOrder") VALUES
+(1, 1, 1, 200.00),
+(1, 3, 2, 3.50),
+(2, 2, 2, 120.00),
+(3, 6, 1, 15.00),
+(4, 5, 1, 80.00),
+(5, 4, 3, 30.00),
+(6, 7, 5, 5.00),
+(7, 9, 1, 25.00),
+(8, 10, 1, 50.00),
+(9, 8, 3, 6.00);
