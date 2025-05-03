@@ -11,6 +11,8 @@
 UserSettings/
 
 # ========== User-specific files ==========
+.vs
+.vsconfig
 .vscode/
 .idea/
 *.suo
