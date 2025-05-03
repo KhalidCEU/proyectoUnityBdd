@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5a549a7514f654b77b77338844c03b1d
+guid: 93fa7be9c7f1c214cb3e099d4e7945b6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 686736888605962593
-    second: APanel - Logo copie_0
+      213: 8535104294080056765
+    second: fast-backward-button_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: APanel - Logo copie_0
+      name: fast-backward-button_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 402
-        height: 402
+        x: 17
+        y: 105
+        width: 478
+        height: 302
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 161f38bcf87c78900800000000000000
-      internalID: 686736888605962593
+      spriteID: dbd8d817228c27670800000000000000
+      internalID: 8535104294080056765
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      APanel - Logo copie_0: 686736888605962593
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
