@@ -23,16 +23,16 @@ INSERT INTO "Categories" ("Id", "Name") VALUES
 (10, 'Tennis Gifts');
 
 INSERT INTO "Stores" ("Id", "Address", "ManagerId") VALUES
-(1, '123 Main St', 1),
-(2, '456 Elm St', 2),
-(3, '789 Oak St', 3),
-(4, '101 Pine St', 4),
-(5, '202 Maple St', 5),
-(6, '303 Birch St', 6),
-(7, '404 Cedar St', 7),
-(8, '505 Willow St', 8),
-(9, '606 Cherry St', 9),
-(10, '707 Ash St', 10);
+(1, '123 Main St', NULL),
+(2, '456 Elm St', NULL),
+(3, '789 Oak St', NULL),
+(4, '101 Pine St', NULL),
+(5, '202 Maple St', NULL),
+(6, '303 Birch St', NULL),
+(7, '404 Cedar St', NULL),
+(8, '505 Willow St', NULL),
+(9, '606 Cherry St', NULL),
+(10, '707 Ash St', NULL);
 
 INSERT INTO "Employees" ("Id", "Name", "PositionId", "Salary", "Email", "Photo", "StoreId") VALUES
 (1, 'Ethan Turner', 1, 50000, 'ethan.turner@example.com', NULL, 1),
@@ -45,6 +45,17 @@ INSERT INTO "Employees" ("Id", "Name", "PositionId", "Salary", "Email", "Photo",
 (8, 'Sophia White', 8, 45000, 'sophia.white@example.com', NULL, 8),
 (9, 'James Scott', 9, 24000, 'james.scott@example.com', NULL, 9),
 (10, 'Ava Green', 10, 47000, 'ava.green@example.com', NULL, 10);
+
+UPDATE "Stores" SET "ManagerId" = 1 WHERE "Id" = 1;
+UPDATE "Stores" SET "ManagerId" = 2 WHERE "Id" = 2;
+UPDATE "Stores" SET "ManagerId" = 3 WHERE "Id" = 3;
+UPDATE "Stores" SET "ManagerId" = 4 WHERE "Id" = 4;
+UPDATE "Stores" SET "ManagerId" = 5 WHERE "Id" = 5;
+UPDATE "Stores" SET "ManagerId" = 6 WHERE "Id" = 6;
+UPDATE "Stores" SET "ManagerId" = 7 WHERE "Id" = 7;
+UPDATE "Stores" SET "ManagerId" = 8 WHERE "Id" = 8;
+UPDATE "Stores" SET "ManagerId" = 9 WHERE "Id" = 9;
+UPDATE "Stores" SET "ManagerId" = 10 WHERE "Id" = 10;
 
 INSERT INTO "Products" ("Id", "Name", "CategoryId", "Price", "Stock") VALUES
 (1, 'Wilson Pro Staff Racket', 1, 200.00, 50),
