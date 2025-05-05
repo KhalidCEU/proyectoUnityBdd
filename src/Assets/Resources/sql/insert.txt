@@ -1,4 +1,4 @@
-INSERT INTO "Positions" ("Id", "Name") VALUES
+﻿INSERT INTO "Positions" ("Id", "Name") VALUES
 (1, 'Manager'),
 (2, 'Salesperson'),
 (3, 'Cashier'),
