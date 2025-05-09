@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 63a928d28cad2c54f92157a9505fd434
+guid: 61a58a92f0dc75e43b81fab9d2e42b28
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4665686187047379928
-    second: cancel_0
+      213: -8248493283448034088
+    second: 353430-checkbox-edit-pen-pencil_107516_0
+  - first:
+      213: -7354873916237347112
+    second: 353430-checkbox-edit-pen-pencil_107516_1
+  - first:
+      213: 3210176349692918063
+    second: 353430-checkbox-edit-pen-pencil_107516_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +106,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cancel_0
+      name: 353430-checkbox-edit-pen-pencil_107516_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 15
-        width: 482
-        height: 482
+        x: 59
+        y: 67
+        width: 314
+        height: 314
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +121,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 82c189bf127204fb0800000000000000
-      internalID: -4665686187047379928
+      spriteID: 8dc62e3af07778d80800000000000000
+      internalID: -8248493283448034088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 353430-checkbox-edit-pen-pencil_107516_1
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 166
+        width: 232
+        height: 232
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d603e6142d3ee990800000000000000
+      internalID: -7354873916237347112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 353430-checkbox-edit-pen-pencil_107516_2
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 347
+        width: 98
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f297ecdb166dc8c20800000000000000
+      internalID: 3210176349692918063
       vertices: []
       indices: 
       edges: []
