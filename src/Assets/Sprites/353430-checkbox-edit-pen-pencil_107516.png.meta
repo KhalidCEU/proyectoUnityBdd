@@ -184,7 +184,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      353430-checkbox-edit-pen-pencil_107516_0: -8248493283448034088
+      353430-checkbox-edit-pen-pencil_107516_1: -7354873916237347112
+      353430-checkbox-edit-pen-pencil_107516_2: 3210176349692918063
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

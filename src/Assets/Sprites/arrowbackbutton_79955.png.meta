@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      arrowbackbutton_79955_0: -5123732035171638174
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

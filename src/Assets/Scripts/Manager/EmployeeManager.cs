@@ -4,9 +4,12 @@ using TMPro;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
 
 public class EmployeeManager : MonoBehaviour
 {
+
+    private int id_autoincrement = 0;
     // Referencias del popup general (reutilizado)
     public GameObject addEmployeePanel;
     public GameObject buttonEliminar;
@@ -66,7 +69,7 @@ public class EmployeeManager : MonoBehaviour
         DisplayEmployees(allEmployees);
         if (allEmployees.Count == 0)
         {
-            Employee fake = new Employee("Alvaro Tester", 1, 1000f, "alvaro@test.com", 1);
+            Employee fake = new Employee(id_autoincrement += 1 ,"Alvaro Tester", 1, 1000f, "alvaro@test.com", 1);
             AddEmployeeToScrollView(fake);
             allEmployees.Add(fake);
         }
@@ -160,6 +163,7 @@ public void SaveNewEmployee()
     }
 
     Employee newEmp = new Employee(
+        id_autoincrement += 1,
         nameInput.text,
         positionId,
         salary,
@@ -182,7 +186,7 @@ public void SaveNewEmployee()
     Debug.Log($"Anadiendo empleado al scroll: {employee.Name}");
     GameObject item = Instantiate(employeeLinePrefab, scrollContentContainer); //Crea una nueva copia del prefab en el scroll
     TMP_Text text = item.GetComponentInChildren<TMP_Text>(); //Busca el texto que muestra el empleado
-    text.text = $"{employee.Id}. {employee.Name}, {employee.Email}"; //que solo muestre esto en la escena prinicpal de employees
+    text.text = $"{id_autoincrement}. {employee.Name}, {employee.Email}"; //que solo muestre esto en la escena prinicpal de employees
 
      Button btn = item.GetComponent<Button>(); //Detecta si el prefab tiene un boton
     if (btn != null)
@@ -224,7 +228,8 @@ public void OpenDetailPopup(Employee e)
     buttonEditar.SetActive(true);
     buttonGuardar.SetActive(false); //hasta que se pulse el boton de editar
 
-    // Rellenar campos
+        // Rellenar campos
+    id_autoincrement = e.Id;
     nameInput.text = e.Name;
     positionIdInput.text = e.PositionId.ToString();
     salaryInput.text = e.Salary.ToString();
@@ -238,6 +243,13 @@ public void OpenDetailPopup(Employee e)
     emailInput.interactable = false;
     storeIdInput.interactable = false;
 }
+
+
+    public void pruebas(string e)
+    {
+        Debug.Log("Abriendo popup de " + e);
+        
+    }
 
 //para editar los input fields
 public void EditSelectedEmployee()
