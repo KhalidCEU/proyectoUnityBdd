@@ -72,7 +72,7 @@ public class StoreManager : MonoBehaviour
 
     public void GoBackToMainMenu()
     {
-        SceneManager.LoadScene("Principal 1");
+        SceneManager.LoadScene("MainView");
     }
 
     public void OnSearchButtonClicked()

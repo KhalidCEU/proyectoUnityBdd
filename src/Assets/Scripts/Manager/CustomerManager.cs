@@ -66,7 +66,7 @@ public class CustomerManager : MonoBehaviour
 
     public void GoBackToMainMenu()
     {
-        SceneManager.LoadScene("Principal 1");
+        SceneManager.LoadScene("MainView");
     }
 
     public void OnSearchChanged(string searchTerm)

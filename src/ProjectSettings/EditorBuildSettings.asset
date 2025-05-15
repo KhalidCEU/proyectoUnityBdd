@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Principal.unity
     guid: 61275963ffe55714a80aec1e96b0f8d1
   - enabled: 1
-    path: Assets/Scenes/Principal 1.unity
+    path: Assets/Scenes/MainView.unity
     guid: ccf09ee800b80ef43ae9ffee7043362d
   - enabled: 1
     path: Assets/Scenes/Employees.unity

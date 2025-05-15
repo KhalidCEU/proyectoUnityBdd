@@ -76,9 +76,9 @@ public class EmployeeManager : MonoBehaviour
         }
     }
     public void GoBackToMainMenu()
-{
-    SceneManager.LoadScene("Principal 1"); 
-}
+    {
+        SceneManager.LoadScene("MainView");
+    }
 
 //para el boton input field del buscador
     public void OnSearchChanged(string searchTerm)
