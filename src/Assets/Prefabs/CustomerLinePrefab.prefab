@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 6.8412056, y: -6.8830123}
-  m_SizeDelta: {x: 779, y: 41}
+  m_SizeDelta: {x: 779.2079, y: 41.6832}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &329566862415760363
 CanvasRenderer:
@@ -143,7 +143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9116902432901658551}
   m_Layer: 0
-  m_Name: EmployeeLinePrefab
+  m_Name: CustomerLinePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

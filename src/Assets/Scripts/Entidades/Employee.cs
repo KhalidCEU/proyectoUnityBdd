@@ -19,9 +19,9 @@ public class Employee
         StoreId = storeId;
     }
 
-    public Employee(int id, string name, int positionId, float salary, string email, int storeId)
+    public Employee( string name, int positionId, float salary, string email, int storeId)
     {
-        Id = id;
+  
         Name = name;
         PositionId = positionId;
         Salary = salary;

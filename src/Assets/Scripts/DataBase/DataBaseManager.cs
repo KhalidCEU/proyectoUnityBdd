@@ -228,6 +228,23 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
+     public static void UpdateCustomer(Customer c)
+    {
+        using (var db = GetConnection())
+        {
+            db.Open();
+            var cmd = db.CreateCommand();
+            cmd.CommandText = @"UPDATE Customers SET Name = @Name, Email = @Email,
+                                PhoneNumber = @PhoneNumber, Address = @Address WHERE Id = @Id";
+            AddParameter(cmd, "@Name", c.Name);
+            AddParameter(cmd, "@Email", c.Email);
+            AddParameter(cmd, "@PhoneNumber", c.PhoneNumber);
+            AddParameter(cmd, "@Address", c.Address);
+            AddParameter(cmd, "@Id", c.Id);
+            cmd.ExecuteNonQuery();
+        }
+    }
+
     // ======================
     // ORDERS
     // ======================
@@ -268,6 +285,34 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
+    public static void DeleteOrder(int id)
+    {
+        using (var db = GetConnection())
+        {
+            db.Open();
+            var cmd = db.CreateCommand();
+            cmd.CommandText = "DELETE FROM Orders WHERE Id = @Id";
+            AddParameter(cmd, "@Id", id);
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public static void UpdateOrder(Order o)
+    {
+        using (var db = GetConnection())
+        {
+            db.Open();
+            var cmd = db.CreateCommand();
+            cmd.CommandText = @"UPDATE Orders SET Date = @Date, CustomerId = @CustomerId,
+                                TotalAmount = @TotalAmount, WHERE Id = @Id";
+            AddParameter(cmd, "@date", o.Date);
+            AddParameter(cmd, "@CustomerId", o.CustomerId);
+            AddParameter(cmd, "@TotalAmount", o.TotalAmount);
+            AddParameter(cmd, "@Id", o.Id);
+            cmd.ExecuteNonQuery();
+        }
+    }
+
     // ======================
     // STORES
     // ======================
@@ -292,5 +337,45 @@ public class DatabaseManager : MonoBehaviour
             }
         }
         return list;
+    }
+
+    public static void AddStore(Store s)
+    {
+        using (var db = GetConnection())
+        {
+            db.Open();
+            var cmd = db.CreateCommand();
+            cmd.CommandText = @"INSERT INTO Orders (Address, ManagerId)
+                                VALUES (@Address, @ManagerId)";
+            AddParameter(cmd, "@Address", s.Address);
+            AddParameter(cmd, "@CustomerId", s.ManagerId);
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public static void DeleteStore(int id)
+    {
+        using (var db = GetConnection())
+        {
+            db.Open();
+            var cmd = db.CreateCommand();
+            cmd.CommandText = "DELETE FROM Stores WHERE Id = @Id";
+            AddParameter(cmd, "@Id", id);
+            cmd.ExecuteNonQuery();
+        }
+    }
+
+    public static void UpdateStore(Store s)
+    {
+        using (var db = GetConnection())
+        {
+            db.Open();
+            var cmd = db.CreateCommand();
+            cmd.CommandText = @"UPDATE Stores SET Address = @Address, ManagerId = @ManagerId";
+            AddParameter(cmd, "@Address", s.Address);
+            AddParameter(cmd, "@ManagerId", s.ManagerId);
+            AddParameter(cmd, "@Id", s.Id);
+            cmd.ExecuteNonQuery();
+        }
     }
 }

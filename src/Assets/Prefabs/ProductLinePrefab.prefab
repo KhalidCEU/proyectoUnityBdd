@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.8412056, y: -6.8830123}
+  m_AnchoredPosition: {x: -7, y: -247}
   m_SizeDelta: {x: 779, y: 41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &329566862415760363
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.24313726}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -143,7 +143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9116902432901658551}
   m_Layer: 0
-  m_Name: EmployeeLinePrefab
+  m_Name: ProductLinePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
