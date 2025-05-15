@@ -7,6 +7,7 @@ using Mono.Data.Sqlite;
 public class DBManager : MonoBehaviour
 {
     private string dbName = "AdminApp.sqlite";
+    private static IDbConnection connection;
 
     void Start()
 	{
@@ -15,7 +16,7 @@ public class DBManager : MonoBehaviour
 
         string connString = "URI=file:" + dbPath;
 
-        var connection = new SqliteConnection(connString);
+        connection = new SqliteConnection(connString);
 
         connection.Open();
 
@@ -41,10 +42,15 @@ public class DBManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    // Called once per frame
     void Update()
 	{
 	}
+
+    public static IDbConnection GetDbConnection()
+    {
+        return connection;
+    }
 
 }
 
