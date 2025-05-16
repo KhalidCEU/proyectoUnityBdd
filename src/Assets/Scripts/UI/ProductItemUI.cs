@@ -14,10 +14,17 @@ public class ProductItemUI : MonoBehaviour
         productData = product;
         manager = mgr;
 
-        nameText.text = product.Name;
+        if (nameText != null)
+        {
+            nameText.text = $"{product.Id}. {product.Name}, Category: {product.CategoryId}";
+        }
 
-        GetComponent<Button>().onClick.AddListener(() => {
-            manager.OpenDetailPopup(productData);
-        });
+        Button btn = GetComponent<Button>();
+        if (btn != null)
+        {
+            btn.onClick.AddListener(() => {
+                manager.OpenDetailPopup(productData);
+            });
+        }
     }
 }

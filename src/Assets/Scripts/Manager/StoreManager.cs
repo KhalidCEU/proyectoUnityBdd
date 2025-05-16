@@ -12,10 +12,7 @@ public class StoreManager : MonoBehaviour
     public GameObject buttonGuardar;
 
     public Transform scrollContentContainer;
-    public GameObject storeLinePrefab;
-
     public TMP_InputField searchInput;
-    public Transform contentContainer;
     public GameObject storeItemPrefab;
 
     public TMP_InputField addressInput;
@@ -28,31 +25,67 @@ public class StoreManager : MonoBehaviour
 
     private Store selectedStore;
     private List<Store> allStores = new List<Store>();
+    private DbManager dbManager;
 
     void Start()
     {
+        dbManager = FindFirstObjectByType<DbManager>();
+
+        if (dbManager == null)
+        {
+            Debug.LogError("DbManager no encontrado en la escena.");
+            return;
+        }
+
         LoadStores();
+
         searchInput.onValueChanged.AddListener(OnSearchChanged);
         searchInput.onSubmit.AddListener(delegate { OnSearchButtonClicked(); });
     }
 
     public void LoadStores()
     {
-        allStores = DatabaseManager.GetAllStores();
+        allStores = dbManager.GetAllStores();
         DisplayStores(allStores);
-
     }
 
     void DisplayStores(List<Store> stores)
     {
-        foreach (Transform child in contentContainer)
+        foreach (Transform child in scrollContentContainer)
             Destroy(child.gameObject);
 
         foreach (Store s in stores)
         {
-            GameObject item = Instantiate(storeItemPrefab, contentContainer);
+             GameObject item = Instantiate(storeItemPrefab, scrollContentContainer);
             item.GetComponent<StoreItemUI>().Setup(s, this);
+            item.GetComponent<RectTransform>().localScale = Vector3.one;
+            item.SetActive(true);
         }
+    }
+
+    private void AddStoreToScrollView(Store store)
+    {
+        Debug.Log($"Añadiendo tienda al scroll: {store.Address}");
+
+        GameObject item = Instantiate(storeItemPrefab, scrollContentContainer);
+        TMP_Text text = item.GetComponentInChildren<TMP_Text>();
+
+        if (text != null)
+        {
+            text.text = $"{store.Id}. Address: {store.Address}";
+            Debug.Log("Texto asignado a prefab: " + text.text);
+        }
+
+        Button btn = item.GetComponent<Button>();
+        if (btn != null)
+        {
+            btn.onClick.AddListener(() => {
+                OpenDetailPopup(store);
+            });
+        }
+
+        item.GetComponent<RectTransform>().localScale = Vector3.one;
+        item.SetActive(true);
     }
 
     public void OnSearchChanged(string searchTerm)
@@ -102,45 +135,18 @@ public class StoreManager : MonoBehaviour
 
         if (!int.TryParse(managerIdInput.text, out managerId))
         {
-            Debug.LogWarning("Invalid manager ID.");
+            Debug.LogWarning("Manager ID inválido.");
             return;
         }
 
         Store newStore = new Store(addressInput.text, managerId);
 
-        AddStoreToScrollView(newStore);
-        //DatabaseManager.AddStore(newStore);
+        dbManager.AddStore(newStore);
+        allStores = dbManager.GetAllStores(); // 💡 Recarga con IDs correctos
+        DisplayStores(allStores);            // 🔄 Refresca la vista
+
         addStorePanel.SetActive(false);
         uiOutsidePopup.SetActive(true);
-    }
-
-    private void AddStoreToScrollView(Store store)
-    {
-        GameObject item = Instantiate(storeLinePrefab, scrollContentContainer);
-        TMP_Text text = item.GetComponentInChildren<TMP_Text>();
-        text.text = $"{store.Id}. Address: {store.Address}";
-
-        Button btn = item.GetComponent<Button>();
-        if (btn != null)
-        {
-            btn.onClick.AddListener(() => {
-                OpenDetailPopup(store);
-                //OpenDetailPopupFromButton();
-            });
-        }
-    }
-
-    private Store storeToShow;
-
-    public void SetStoreToShow(Store s)
-    {
-        storeToShow = s;
-    }
-
-    public void OpenDetailPopupFromButton()
-    {
-        if (storeToShow != null)
-            OpenDetailPopup(storeToShow);
     }
 
     public void OpenDetailPopup(Store s)
@@ -172,7 +178,7 @@ public class StoreManager : MonoBehaviour
             int.Parse(managerIdInput.text)
         );
 
-        DatabaseManager.UpdateStore(updated);
+        dbManager.UpdateStore(updated);
         ClosePopup();
         LoadStores();
     }
@@ -184,7 +190,7 @@ public class StoreManager : MonoBehaviour
         else if (isEditEnabled)
             EditSelectedStore();
         else
-            Debug.LogWarning("Editing not enabled");
+            Debug.LogWarning("No puedes guardar sin activar el modo edición.");
     }
 
     public void EnableEditMode()
@@ -197,7 +203,7 @@ public class StoreManager : MonoBehaviour
 
     public void DeleteSelectedStore()
     {
-        DatabaseManager.DeleteStore(selectedStore.Id);
+        dbManager.DeleteStore(selectedStore.Id);
         ClosePopup();
         LoadStores();
     }

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System.Linq;
 using UnityEngine.SceneManagement;
 
 public class ProductManager : MonoBehaviour
@@ -13,11 +12,7 @@ public class ProductManager : MonoBehaviour
     public GameObject buttonGuardar;
 
     public Transform scrollContentContainer;
-    //public GameObject productLinePrefab;
-
-
     public TMP_InputField searchInput;
-    //public Transform contentContainer;
     public GameObject productItemPrefab;
 
     public TMP_InputField nameInput;
@@ -33,8 +28,18 @@ public class ProductManager : MonoBehaviour
     private Product selectedProduct;
     private List<Product> allProducts = new List<Product>();
 
+    private DbManager dbManager;
+
     void Start()
     {
+        dbManager = FindFirstObjectByType<DbManager>();
+
+        if (dbManager == null)
+        {
+            Debug.LogError("No se encontró el DbManager en escena.");
+            return;
+        }
+
         LoadProducts();
         searchInput.onValueChanged.AddListener(OnSearchChanged);
         searchInput.onSubmit.AddListener(delegate { OnSearchButtonClicked(); });
@@ -42,20 +47,48 @@ public class ProductManager : MonoBehaviour
 
     public void LoadProducts()
     {
-        allProducts = DatabaseManager.GetAllProducts();
+        allProducts = dbManager.GetAllProducts();
         DisplayProducts(allProducts);
     }
 
     void DisplayProducts(List<Product> products)
-    {
-        foreach (Transform child in scrollContentContainer)
-            Destroy(child.gameObject);
+{
+    foreach (Transform child in scrollContentContainer)
+        Destroy(child.gameObject);
 
-        foreach (Product p in products)
+    foreach (Product p in products)
+    {
+        GameObject item = Instantiate(productItemPrefab, scrollContentContainer);
+        item.GetComponent<ProductItemUI>().Setup(p, this);
+        item.GetComponent<RectTransform>().localScale = Vector3.one;
+        item.SetActive(true);
+    }
+}
+
+
+    private void AddProductToScrollView(Product product)
+    {
+        Debug.Log($"Añadiendo producto al scroll: {product.Name}");
+
+        GameObject item = Instantiate(productItemPrefab, scrollContentContainer);
+
+        TMP_Text text = item.GetComponentInChildren<TMP_Text>();
+        if (text != null)
         {
-            GameObject item = Instantiate(productItemPrefab, scrollContentContainer);
-            item.GetComponent<ProductItemUI>().Setup(p, this);
+            text.text = $"{product.Id}. Nombre: {product.Name}, Categoría: {product.CategoryId}";
+            Debug.Log("Texto asignado a prefab: " + text.text);
         }
+
+        Button btn = item.GetComponent<Button>();
+        if (btn != null)
+        {
+            btn.onClick.AddListener(() => {
+                OpenDetailPopup(product);
+            });
+        }
+
+        item.GetComponent<RectTransform>().localScale = Vector3.one;
+        item.SetActive(true);
     }
 
     public void GoBackToMainMenu()
@@ -107,48 +140,18 @@ public class ProductManager : MonoBehaviour
             !float.TryParse(priceInput.text, out price) ||
             !int.TryParse(stockInput.text, out stock))
         {
-            Debug.LogWarning("Invalid format in numerical fields.");
+            Debug.LogWarning("Formato inválido en los campos numéricos.");
             return;
         }
 
         Product newProduct = new Product(nameInput.text, categoryId, price, stock);
 
-        AddProductToScrollView(newProduct);
-        DatabaseManager.AddProduct(newProduct);
+        dbManager.AddProduct(newProduct);
+        allProducts = dbManager.GetAllProducts();
+        DisplayProducts(allProducts);
 
         addProductPanel.SetActive(false);
         uiOutsidePopup.SetActive(true);
-    }
-
-    private void AddProductToScrollView(Product product)
-    {
-        GameObject item = Instantiate(productItemPrefab, scrollContentContainer);
-        TMP_Text text = item.GetComponentInChildren<TMP_Text>();
-        text.text = $"{product.Id}. {product.Name}, Category: {product.CategoryId}";
-
-        Button btn = item.GetComponent<Button>();
-        if (btn != null)
-        {
-            btn.onClick.AddListener(() => {
-                OpenDetailPopup(product);
-                OpenDetailPopupFromButton();
-            });
-        }
-    }
-
-    private Product productToShow;
-
-    public void SetProductToShow(Product p)
-    {
-        productToShow = p;
-    }
-
-    public void OpenDetailPopupFromButton()
-    {
-        if (productToShow != null)
-        {
-            OpenDetailPopup(productToShow);
-        }
     }
 
     public void OpenDetailPopup(Product p)
@@ -188,7 +191,7 @@ public class ProductManager : MonoBehaviour
             int.Parse(stockInput.text)
         );
 
-        DatabaseManager.UpdateProduct(updated);
+        dbManager.UpdateProduct(updated);
         ClosePopup();
         LoadProducts();
     }
@@ -200,7 +203,7 @@ public class ProductManager : MonoBehaviour
         else if (isEditEnabled)
             EditSelectedProduct();
         else
-            Debug.LogWarning("Cannot save without edit mode.");
+            Debug.LogWarning("No puedes guardar sin activar el modo edición.");
     }
 
     public void EnableEditMode()
@@ -217,7 +220,7 @@ public class ProductManager : MonoBehaviour
 
     public void DeleteSelectedProduct()
     {
-        DatabaseManager.DeleteProduct(selectedProduct.Id);
+        dbManager.DeleteProduct(selectedProduct.Id);
         ClosePopup();
         LoadProducts();
     }

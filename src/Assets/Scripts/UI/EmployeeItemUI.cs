@@ -51,24 +51,3 @@ public class EmployeeItemUI : MonoBehaviour
 }
 
 
-/*public class EmployeeItemUI : MonoBehaviour
-{
-    private Employee employeeData;
-    private EmployeeManager manager;
-
-    public TMP_Text nameText;
-
-    public void Setup(Employee employee, EmployeeManager mgr)
-    {
-        employeeData = employee;
-        manager = mgr;
-     
-         nameText.text = $"{employee.Id}. {employee.Name}, {employee.Email}"; 
-         Debug.Log("Texto asignado a prefab: " + nameText.text);
-
-        GetComponent<Button>().onClick.AddListener(() => {
-            manager.OpenDetailPopup(employeeData);
-        });
-    }
-}*/
-

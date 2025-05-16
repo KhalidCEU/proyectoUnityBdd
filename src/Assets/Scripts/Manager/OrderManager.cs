@@ -4,9 +4,13 @@ using TMPro;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using System.Collections;
+
+
 
 public class OrderManager : MonoBehaviour
 {
+    
     // Referencias del popup general (reutilizado)
     public GameObject addOrderPanel;
     public GameObject buttonEliminar;
@@ -40,31 +44,45 @@ public class OrderManager : MonoBehaviour
 
     private Order selectedOrder;
     private List<Order> allOrders = new List<Order>();
+    
+    private DbManager dbManager;
 
-    void Start()
+void Start()
+{
+    dbManager = FindFirstObjectByType<DbManager>();
+    if (dbManager == null)
     {
-        LoadOrders();
-        searchInput.onValueChanged.AddListener(OnSearchChanged);
-        searchInput.onSubmit.AddListener(delegate { OnSearchButtonClicked(); });
+        Debug.LogError("DbManager no encontrado en la escena. Asegúrate de que hay un GameObject con el script DbManager activo.");
+        return;
     }
+
+    LoadOrders(); 
+    searchInput.onValueChanged.AddListener(OnSearchChanged);
+    searchInput.onSubmit.AddListener(delegate { OnSearchButtonClicked(); });
+}
+
 
     public void LoadOrders()
     {
-        allOrders = DatabaseManager.GetAllOrders();
+        allOrders = dbManager.GetAllOrders();
         DisplayOrders(allOrders);
     }
 
-    void DisplayOrders(List<Order> orders)
-    {
-        foreach (Transform child in scrollContentContainer)
-            Destroy(child.gameObject);
+   void DisplayOrders(List<Order> orders)
+{
+    Debug.Log("DisplayOrders llamado con " + orders.Count + " órdenes");
 
-        foreach (Order o in orders)
-        {
-            GameObject item = Instantiate(orderItemPrefab, scrollContentContainer);
-            item.GetComponent<OrderItemUI>().Setup(o, this);
-        }
+    foreach (Transform child in scrollContentContainer)
+        Destroy(child.gameObject);
+
+    foreach (Order o in orders)
+    {
+        GameObject item = Instantiate(orderItemPrefab, scrollContentContainer);
+        item.GetComponent<OrderItemUI>().Setup(o, this);
+        item.GetComponent<RectTransform>().localScale = Vector3.one;
+        item.SetActive(true);
     }
+}
 
     public void GoBackToMainMenu()
     {
@@ -109,33 +127,41 @@ public class OrderManager : MonoBehaviour
     }
 
     public void SaveNewOrder()
+{
+    int customerId;
+    float totalAmount;
+
+    if (!int.TryParse(customerIdInput.text, out customerId) ||
+        !float.TryParse(totalAmountInput.text, out totalAmount))
     {
-        int customerId;
-        float totalAmount;
-
-        if (!int.TryParse(customerIdInput.text, out customerId) ||
-            !float.TryParse(totalAmountInput.text, out totalAmount))
-        {
-            Debug.LogWarning("One or more numeric fields are not in correct format.");
-            return;
-        }
-
-        if (totalAmount < 0)
-        {
-            Debug.LogWarning("Total amount cannot be negative.");
-            return;
-        }
-
-        Order newOrder = new Order(dateInput.text, customerId, totalAmount);
-
-        AddOrderToScrollView(newOrder);
-        DatabaseManager.AddOrder(newOrder);
-        addOrderPanel.SetActive(false);
-        uiOutsidePopup.SetActive(true);
+        Debug.LogWarning("One or more numeric fields are not in correct format.");
+        return;
     }
+
+    if (totalAmount < 0)
+    {
+        Debug.LogWarning("Total amount cannot be negative.");
+        return;
+    }
+
+    Order newOrder = new Order(dateInput.text, customerId, totalAmount);
+Debug.Log("dbManager: " + dbManager);
+Debug.Log(" dateInput: " + dateInput);
+Debug.Log(" customerIdInput: " + customerIdInput);
+Debug.Log(" totalAmountInput: " + totalAmountInput);
+
+
+    dbManager.AddOrder(newOrder);
+    allOrders = dbManager.GetAllOrders(); // actualizamos con IDs reales
+    DisplayOrders(allOrders);
+
+    addOrderPanel.SetActive(false);
+    uiOutsidePopup.SetActive(true);
+}
 
     private void AddOrderToScrollView(Order order)
     {
+        Debug.Log($"Anadiendo order al scroll: {order.Id}");
         GameObject item = Instantiate(orderItemPrefab, scrollContentContainer);
         TMP_Text text = item.GetComponentInChildren<TMP_Text>();
         text.text = $"{order.Id}. Date: {order.Date}, Customer Id: {order.CustomerId}";
@@ -145,7 +171,7 @@ public class OrderManager : MonoBehaviour
         {
             btn.onClick.AddListener(() => {
                 SetOrderToShow(order);
-                OpenDetailPopupFromButton();
+                
             });
         }
     }
@@ -200,7 +226,7 @@ public class OrderManager : MonoBehaviour
             parsedAmount
         );
 
-        DatabaseManager.UpdateOrder(updated);
+        dbManager.UpdateOrder(updated);
         ClosePopup();
         LoadOrders();
     }
@@ -234,7 +260,7 @@ public class OrderManager : MonoBehaviour
 
     public void DeleteSelectedOrder()
     {
-        DatabaseManager.DeleteOrder(selectedOrder.Id);
+        dbManager.DeleteOrder(selectedOrder.Id);
         ClosePopup();
         LoadOrders();
     }

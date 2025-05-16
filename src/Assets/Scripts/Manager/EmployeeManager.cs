@@ -21,7 +21,7 @@ public class EmployeeManager : MonoBehaviour
 
     // Referencias UI generales
     public TMP_InputField searchInput;
-    //public Transform contentContainer;
+
     public GameObject employeeItemPrefab;
 
     // Campos del formulario del popup
@@ -62,29 +62,8 @@ public class EmployeeManager : MonoBehaviour
     public void LoadEmployees()
     {
         allEmployees = dbManager.GetAllEmployees();
-
-       /* Debug.Log("Employees count: " + allEmployees.Count);
-        foreach (var employee in allEmployees)
-        {
-            Debug.Log(employee);
-        }*/
-        
-
         DisplayEmployees(allEmployees);
     }
-
-    /*void DisplayEmployees(List<Employee> employees)
-    {
-        foreach (Transform child in scrollContentContainer)
-            Destroy(child.gameObject);
-
-        foreach (Employee e in employees)
-        {
-            GameObject item = Instantiate(employeeItemPrefab, scrollContentContainer);
-            item.GetComponent<EmployeeItemUI>().Setup(e, this);
-
-        }
-    }*/
 
     void DisplayEmployees(List<Employee> employees)
 {
@@ -152,12 +131,6 @@ public class EmployeeManager : MonoBehaviour
         emailInput.text = "";
         storeIdInput.text = "";
 
-        //que desactivan todos los input fields porque no se le ha dado a editar
-        /*nameInput.interactable = false;
-        positionIdInput.interactable = false;
-        salaryInput.interactable = false;
-        emailInput.interactable = false;
-        storeIdInput.interactable = false;*/
     }
 
 
@@ -183,14 +156,8 @@ public class EmployeeManager : MonoBehaviour
         );
 
         dbManager.AddEmployee(newEmp);                     // 1. Lo guardas
-        allEmployees = dbManager.GetAllEmployees();        // 2. Lo recargas con ID correcto
+        allEmployees = dbManager.GetAllEmployees();        // 2. Lo recargas con ID real
         DisplayEmployees(allEmployees);                    // 3. Actualizas el scroll
-
-
-        /*AddEmployeeToScrollView(newEmp); //perimero instancio en la UI
-        dbManager.AddEmployee(newEmp); //luego guardamos en la base de datos
-        addEmployeePanel.SetActive(false);
-        uiOutsidePopup.SetActive(true);*/
 
     }
 
@@ -209,7 +176,7 @@ public class EmployeeManager : MonoBehaviour
             // boton para que el prefab sea clicable
             btn.onClick.AddListener(() => {
                 OpenDetailPopup(employee);  //sale el popup con su infromacion
-                //OpenDetailPopupFromButton();
+                
             });
         }
     }

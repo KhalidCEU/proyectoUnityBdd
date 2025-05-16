@@ -36,31 +36,7 @@ public class DatabaseManager : MonoBehaviour
     // ======================
     // EMPLOYEES
     // ======================
-   /* public static List<Employee> GetAllEmployees()
-    {
-        List<Employee> list = new List<Employee>();
-        using (IDbConnection db = GetConnection())
-        {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT Id, Name, PositionId, Salary, Email, StoreId FROM Employees";
-            //md.CommandText = "SELECT * FROM Employees";
-            using (var reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    var emp = new Employee(
-                        reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2),
-                        reader.GetFloat(3), reader.GetString(4), null, reader.GetInt32(5)
-                    );
-                    Debug.Log("[DB] Empleado leido: " + emp); //quitar despues
-                    list.Add(emp);
-                }
-            }
-        }
-        Debug.Log("[DB] Total empleados leídos: " + list.Count); //quitar despues
-        return list;
-    }*/
+
     public static List<Employee> GetAllEmployees()
 {
     List<Employee> list = new List<Employee>();
@@ -90,13 +66,13 @@ public class DatabaseManager : MonoBehaviour
                 }
                 catch (System.Exception ex)
                 {
-                    Debug.LogError("❌ Error leyendo un empleado: " + ex.Message);
+                    Debug.LogError(" Error leyendo un empleado: " + ex.Message);
                 }
             }
         }
     }
 
-    Debug.Log("✅ Total empleados leídos: " + list.Count);
+    Debug.Log(" Total empleados leídos: " + list.Count);
     return list;
 }
 
@@ -153,26 +129,40 @@ public class DatabaseManager : MonoBehaviour
     // PRODUCTS
     // ======================
     public static List<Product> GetAllProducts()
+{
+    List<Product> list = new List<Product>();
+
+    using (var db = GetConnection())
     {
-        List<Product> list = new List<Product>();
-        using (var db = GetConnection())
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT Id, Name, CategoryId, Price, Stock FROM Products";
+
+        using (var reader = cmd.ExecuteReader())
         {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Products";
-            using (var reader = cmd.ExecuteReader())
+            while (reader.Read())
             {
-                while (reader.Read())
+                try
                 {
-                    list.Add(new Product(
-                        reader.GetInt32(0), reader.GetString(1),
-                        reader.GetInt32(2), reader.GetFloat(3), reader.GetInt32(4)
-                    ));
+                    var product = new Product(
+                        reader.GetInt32(0),
+                        reader.GetString(1),
+                        reader.GetInt32(2),
+                        reader.GetFloat(3),
+                        reader.GetInt32(4)
+                    );
+                    list.Add(product);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError("Error reading product: " + ex.Message);
                 }
             }
         }
-        return list;
     }
+
+    return list;
+}
 
     public static void AddProduct(Product p)
     {
@@ -310,26 +300,42 @@ public class DatabaseManager : MonoBehaviour
     // ORDERS
     // ======================
     public static List<Order> GetAllOrders()
+{
+    List<Order> list = new List<Order>();
+
+    using (var db = GetConnection())
     {
-        List<Order> list = new List<Order>();
-        using (var db = GetConnection())
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT Id, Date, CustomerId, TotalAmount FROM Orders";
+
+        using (var reader = cmd.ExecuteReader())
         {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Orders";
-            using (var reader = cmd.ExecuteReader())
+            while (reader.Read())
             {
-                while (reader.Read())
+                try
                 {
-                    list.Add(new Order(
-                        reader.GetInt32(0), reader.GetString(1),
-                        reader.GetInt32(2), reader.GetFloat(3)
-                    ));
+                    int id = reader.GetInt32(0);
+                    string date =  reader[1].ToString();
+                    int customerId = reader.GetInt32(2);
+                    float totalAmount = reader.GetFloat(3);
+
+                    var order = new Order(id, date, customerId, totalAmount);
+                    Debug.Log("s Orden leída: " + order);
+                    list.Add(order);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError("Error al leer una orden: " + ex.Message);
                 }
             }
         }
-        return list;
     }
+
+    Debug.Log("Total órdenes leídas: " + list.Count);
+    return list;
+}
+
 
     public static void AddOrder(Order o)
     {
@@ -378,27 +384,29 @@ public class DatabaseManager : MonoBehaviour
     // STORES
     // ======================
     public static List<Store> GetAllStores()
+{
+    List<Store> list = new List<Store>();
+    using (var db = GetConnection())
     {
-        List<Store> list = new List<Store>();
-        using (var db = GetConnection())
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT * FROM Stores";
+
+        using (var reader = cmd.ExecuteReader())
         {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Stores";
-            using (var reader = cmd.ExecuteReader())
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    list.Add(new Store(
-                        reader.GetInt32(0),
-                        reader.GetString(1),
-                        reader.IsDBNull(2) ? -1 : reader.GetInt32(2)
-                    ));
-                }
+                list.Add(new Store(
+                    reader.GetInt32(0),                         // Id
+                    reader.GetString(1),                        // Address
+                    reader.IsDBNull(2) ? -1 : reader.GetInt32(2) // ManagerId (puede ser NULL)
+                ));
             }
         }
-        return list;
     }
+    return list;
+}
+
 
     public static void AddStore(Store s)
     {

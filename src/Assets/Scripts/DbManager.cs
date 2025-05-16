@@ -19,17 +19,18 @@ public class DbManager : MonoBehaviour
         connString = "URI=file:" + dbPath;
 
         connection = new SqliteConnection(connString);
-
         connection.Open();
 
         Seeder.CreateTables(connection);
 
-        if (IsTableEmpty(connection, "Employees")) {
+        if (IsTableEmpty(connection, "Employees"))
+        {
             Seeder.InsertIntoTables(connection);
-        } else {
+        }
+        else
+        {
             Debug.Log("DB is already seeded !");
         }
-
     }
 
     private bool IsTableEmpty(IDbConnection connection, string tableName)
@@ -42,16 +43,10 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     private IDbConnection GetConnection()
     {
         return new SqliteConnection(connString);
     }
-
 
     private void AddParameter(IDbCommand cmd, string name, object value)
     {
@@ -61,16 +56,12 @@ public class DbManager : MonoBehaviour
         cmd.Parameters.Add(param);
     }
 
-    // ======================
-    // EMPLOYEES
-    // ======================
+    // ================= EMPLOYEES =================
     public List<Employee> GetAllEmployees()
     {
         List<Employee> list = new List<Employee>();
-
         using (var db = GetConnection())
         {
-            Debug.Log("Entered GetAllEmployees!");
             db.Open();
             var cmd = db.CreateCommand();
             cmd.CommandText = "SELECT * FROM Employees";
@@ -135,13 +126,10 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    // ======================
-    // PRODUCTS
-    // ======================
+    // ================= PRODUCTS =================
     public List<Product> GetAllProducts()
     {
         List<Product> list = new List<Product>();
-
         using (var db = GetConnection())
         {
             db.Open();
@@ -206,15 +194,12 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    // ======================
-    // CUSTOMERS
-    // ======================
+    // ================= CUSTOMERS =================
     public List<Customer> GetAllCustomers()
     {
         List<Customer> list = new List<Customer>();
         using (var db = GetConnection())
         {
-            Debug.Log("Entered GetAllCustomers!");
             db.Open();
             var cmd = db.CreateCommand();
             cmd.CommandText = "SELECT * FROM Customers";
@@ -260,7 +245,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-     public void UpdateCustomer(Customer c)
+    public void UpdateCustomer(Customer c)
     {
         using (var db = GetConnection())
         {
@@ -277,9 +262,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    // ======================
-    // ORDERS
-    // ======================
+    // ================= ORDERS =================
     public List<Order> GetAllOrders()
     {
         List<Order> list = new List<Order>();
@@ -293,7 +276,7 @@ public class DbManager : MonoBehaviour
                 while (reader.Read())
                 {
                     list.Add(new Order(
-                        reader.GetInt32(0), reader.GetString(1),
+                        reader.GetInt32(0), reader[1].ToString(),
                         reader.GetInt32(2), reader.GetFloat(3)
                     ));
                 }
@@ -336,8 +319,8 @@ public class DbManager : MonoBehaviour
             db.Open();
             var cmd = db.CreateCommand();
             cmd.CommandText = @"UPDATE Orders SET Date = @Date, CustomerId = @CustomerId,
-                                TotalAmount = @TotalAmount, WHERE Id = @Id";
-            AddParameter(cmd, "@date", o.Date);
+                                TotalAmount = @TotalAmount WHERE Id = @Id";
+            AddParameter(cmd, "@Date", o.Date);
             AddParameter(cmd, "@CustomerId", o.CustomerId);
             AddParameter(cmd, "@TotalAmount", o.TotalAmount);
             AddParameter(cmd, "@Id", o.Id);
@@ -345,9 +328,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    // ======================
-    // STORES
-    // ======================
+    // ================= STORES =================
     public List<Store> GetAllStores()
     {
         List<Store> list = new List<Store>();
@@ -361,8 +342,7 @@ public class DbManager : MonoBehaviour
                 while (reader.Read())
                 {
                     list.Add(new Store(
-                        reader.GetInt32(0),
-                        reader.GetString(1),
+                        reader.GetInt32(0), reader.GetString(1),
                         reader.IsDBNull(2) ? -1 : reader.GetInt32(2)
                     ));
                 }
@@ -377,10 +357,10 @@ public class DbManager : MonoBehaviour
         {
             db.Open();
             var cmd = db.CreateCommand();
-            cmd.CommandText = @"INSERT INTO Orders (Address, ManagerId)
+            cmd.CommandText = @"INSERT INTO Stores (Address, ManagerId)
                                 VALUES (@Address, @ManagerId)";
             AddParameter(cmd, "@Address", s.Address);
-            AddParameter(cmd, "@CustomerId", s.ManagerId);
+            AddParameter(cmd, "@ManagerId", s.ManagerId);
             cmd.ExecuteNonQuery();
         }
     }
@@ -403,13 +383,11 @@ public class DbManager : MonoBehaviour
         {
             db.Open();
             var cmd = db.CreateCommand();
-            cmd.CommandText = @"UPDATE Stores SET Address = @Address, ManagerId = @ManagerId";
+            cmd.CommandText = @"UPDATE Stores SET Address = @Address, ManagerId = @ManagerId WHERE Id = @Id";
             AddParameter(cmd, "@Address", s.Address);
             AddParameter(cmd, "@ManagerId", s.ManagerId);
             AddParameter(cmd, "@Id", s.Id);
             cmd.ExecuteNonQuery();
         }
     }
-
 }
-
