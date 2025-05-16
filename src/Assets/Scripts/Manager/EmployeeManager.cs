@@ -49,17 +49,26 @@ public class EmployeeManager : MonoBehaviour
     private Employee selectedEmployee;
     private List<Employee> allEmployees = new List<Employee>();
 
+    private DbManager dbManager;
+
     void Start()
     {
+        dbManager = FindObjectOfType<DbManager>();
         LoadEmployees();
         searchInput.onValueChanged.AddListener(OnSearchChanged);
         searchInput.onSubmit.AddListener(delegate { OnSearchButtonClicked(); }); //para que el enter en dl input field de buscar funciona como la lupa
-         
     }
 
     public void LoadEmployees()
     {
-        allEmployees = DatabaseManager.GetAllEmployees();
+        allEmployees = dbManager.GetAllEmployees();
+
+        Debug.Log("Employees count: " + allEmployees.Count);
+        foreach (var employee in allEmployees)
+        {
+            Debug.Log(employee);
+        }
+
         DisplayEmployees(allEmployees);
     }
 
@@ -101,7 +110,6 @@ public class EmployeeManager : MonoBehaviour
 
     }
 
-    
 
     public void OnSearchButtonClicked()
     {
@@ -109,201 +117,195 @@ public class EmployeeManager : MonoBehaviour
     }
 
    public void OpenAddEmployeePanel()
-{
-    isInAddMode = true;
-    isEditEnabled = false;
-
-    addEmployeePanel.SetActive(true);
-    uiOutsidePopup.SetActive(false);
-
-    // Solo muestra los botones de cerrar y editar (guardar se muestra pero solo funcionara despues de darle a editar)
-    buttonEliminar.SetActive(false);
-    buttonEditar.SetActive(false);
-    buttonGuardar.SetActive(true); // desactivado al principio
-
-    // Limpiar campos
-    nameInput.text = "";
-    positionIdInput.text = "";
-    salaryInput.text = "";
-    emailInput.text = "";
-    storeIdInput.text = "";
-
-    //que desactivan todos los input fields porque no se le ha dado a editar
-    /*nameInput.interactable = false;
-    positionIdInput.interactable = false;
-    salaryInput.interactable = false;
-    emailInput.interactable = false;
-    storeIdInput.interactable = false;*/
-}
-
-
-public void SaveNewEmployee()
-{
-    int positionId, storeId;
-    float salary;
-
-    if (!int.TryParse(positionIdInput.text, out positionId) ||
-        !float.TryParse(salaryInput.text, out salary) ||
-        !int.TryParse(storeIdInput.text, out storeId))
     {
-        Debug.LogWarning("Alguno de los campos numericos no tiene formato correcto.");
-        return;
+        isInAddMode = true;
+        isEditEnabled = false;
+
+        addEmployeePanel.SetActive(true);
+        uiOutsidePopup.SetActive(false);
+
+        // Solo muestra los botones de cerrar y editar (guardar se muestra pero solo funcionara despues de darle a editar)
+        buttonEliminar.SetActive(false);
+        buttonEditar.SetActive(false);
+        buttonGuardar.SetActive(true); // desactivado al principio
+
+        // Limpiar campos
+        nameInput.text = "";
+        positionIdInput.text = "";
+        salaryInput.text = "";
+        emailInput.text = "";
+        storeIdInput.text = "";
+
+        //que desactivan todos los input fields porque no se le ha dado a editar
+        /*nameInput.interactable = false;
+        positionIdInput.interactable = false;
+        salaryInput.interactable = false;
+        emailInput.interactable = false;
+        storeIdInput.interactable = false;*/
     }
 
-    Employee newEmp = new Employee(
-        nameInput.text,
-        positionId,
-        salary,
-        emailInput.text,
-        storeId
-    );
 
-    
-    AddEmployeeToScrollView(newEmp); 
-    //DatabaseManager.AddEmployee(newEmp);
-    addEmployeePanel.SetActive(false);
-    uiOutsidePopup.SetActive(true);
+    public void SaveNewEmployee()
+    {
+        int positionId, storeId;
+        float salary;
 
-}
+        if (!int.TryParse(positionIdInput.text, out positionId) ||
+            !float.TryParse(salaryInput.text, out salary) ||
+            !int.TryParse(storeIdInput.text, out storeId))
+        {
+            Debug.LogWarning("Alguno de los campos numericos no tiene formato correcto.");
+            return;
+        }
+
+        Employee newEmp = new Employee(
+            nameInput.text,
+            positionId,
+            salary,
+            emailInput.text,
+            storeId
+        );
+
+
+        AddEmployeeToScrollView(newEmp);
+        dbManager.AddEmployee(newEmp);
+        addEmployeePanel.SetActive(false);
+        uiOutsidePopup.SetActive(true);
+
+    }
 
 
     // metodo para añadir a scroll el prefab con la infromacion de "Guardar"
     private void AddEmployeeToScrollView(Employee employee)
-{
-    Debug.Log($"Anadiendo empleado al scroll: {employee.Name}");
-    GameObject item = Instantiate(employeeLinePrefab, scrollContentContainer); //Crea una nueva copia del prefab en el scroll
-    TMP_Text text = item.GetComponentInChildren<TMP_Text>(); //Busca el texto que muestra el empleado
-    text.text = $"{employee.Id}. Name: {employee.Name}, Email: {employee.Email}"; //que solo muestre esto en la escena prinicpal de employees
-
-     Button btn = item.GetComponent<Button>(); //Detecta si el prefab tiene un boton
-    if (btn != null)
     {
-        // boton para que el prefab sea clicable
-        btn.onClick.AddListener(() => {
-            OpenDetailPopup(employee);  //sale el popup con su infromacion
-            OpenDetailPopupFromButton();
-        });
+        Debug.Log($"Anadiendo empleado al scroll: {employee.Name}");
+        GameObject item = Instantiate(employeeLinePrefab, scrollContentContainer); //Crea una nueva copia del prefab en el scroll
+        TMP_Text text = item.GetComponentInChildren<TMP_Text>(); //Busca el texto que muestra el empleado
+        text.text = $"{employee.Id}. Name: {employee.Name}, Email: {employee.Email}"; //que solo muestre esto en la escena prinicpal de employees
+
+        Button btn = item.GetComponent<Button>(); //Detecta si el prefab tiene un boton
+        if (btn != null)
+        {
+            // boton para que el prefab sea clicable
+            btn.onClick.AddListener(() => {
+                OpenDetailPopup(employee);  //sale el popup con su infromacion
+                OpenDetailPopupFromButton();
+            });
+        }
     }
-}
 
-//este metodo y el siguiente son "trampas " para que el boton del prefab peuda llamar a OpenDetailPopup aun teniendo una referencia
-private Employee employeeToShow;
+    //este metodo y el siguiente son "trampas " para que el boton del prefab peuda llamar a OpenDetailPopup aun teniendo una referencia
+    private Employee employeeToShow;
 
-public void SetEmployeeToShow(Employee e)
-{
-    employeeToShow = e;
-}
-
-public void OpenDetailPopupFromButton()
-{
-    if (employeeToShow != null)
+    public void SetEmployeeToShow(Employee e)
     {
-        OpenDetailPopup(employeeToShow);
+        employeeToShow = e;
     }
-}
 
-public void OpenDetailPopup(Employee e)
-{
-    Debug.Log("Abriendo popup de " + e.Name);
-    uiOutsidePopup.SetActive(false); //desativamos los demas botones que no esten en el popup
-    isInAddMode = false;
-    isEditEnabled = false;
-    selectedEmployee = e;
-
-    addEmployeePanel.SetActive(true);
-    buttonEliminar.SetActive(true);
-    buttonEditar.SetActive(true);
-    buttonGuardar.SetActive(false); //hasta que se pulse el boton de editar
-
-    // Rellenar campos
-    nameInput.text = e.Name;
-    positionIdInput.text = e.PositionId.ToString();
-    salaryInput.text = e.Salary.ToString();
-    emailInput.text = e.Email;
-    storeIdInput.text = e.StoreId.ToString();
-
-    // Desactivar edicion
-    nameInput.interactable = false;
-    positionIdInput.interactable = false;
-    salaryInput.interactable = false;
-    emailInput.interactable = false;
-    storeIdInput.interactable = false;
-}
-
-//para editar los input fields
-public void EditSelectedEmployee()
-{
-    if (selectedEmployee == null) return;
-
-    // Limpiar salario (por si lleva simbolo €)
-    string cleanSalary = salaryInput.text.Replace("€", "").Trim();
-    float salaryParsed = float.Parse(cleanSalary);
-
-    Employee updated = new Employee(
-        selectedEmployee.Id,
-        nameInput.text,
-        int.Parse(positionIdInput.text), //poder escribir numeros en un input field
-        salaryParsed,
-        emailInput.text,
-        selectedEmployee.Photo, // null de momento
-        int.Parse(storeIdInput.text)
-    );
-
-    DatabaseManager.UpdateEmployee(updated);
-    ClosePopup();
-    LoadEmployees();
-}
-
-public void HandleGuardar()
-{
-    Debug.Log("info GUARDADA");
-    if (isInAddMode)
+    public void OpenDetailPopupFromButton()
     {
-        SaveNewEmployee();
+        if (employeeToShow != null)
+        {
+            OpenDetailPopup(employeeToShow);
+        }
     }
-    else if (isEditEnabled)
+
+    public void OpenDetailPopup(Employee e)
     {
-        EditSelectedEmployee();
+        Debug.Log("Abriendo popup de " + e.Name);
+        uiOutsidePopup.SetActive(false); //desativamos los demas botones que no esten en el popup
+        isInAddMode = false;
+        isEditEnabled = false;
+        selectedEmployee = e;
+
+        addEmployeePanel.SetActive(true);
+        buttonEliminar.SetActive(true);
+        buttonEditar.SetActive(true);
+        buttonGuardar.SetActive(false); //hasta que se pulse el boton de editar
+
+        // Rellenar campos
+        nameInput.text = e.Name;
+        positionIdInput.text = e.PositionId.ToString();
+        salaryInput.text = e.Salary.ToString();
+        emailInput.text = e.Email;
+        storeIdInput.text = e.StoreId.ToString();
+
+        // Desactivar edicion
+        nameInput.interactable = false;
+        positionIdInput.interactable = false;
+        salaryInput.interactable = false;
+        emailInput.interactable = false;
+        storeIdInput.interactable = false;
     }
-    else
+
+    //para editar los input fields
+    public void EditSelectedEmployee()
     {
-        Debug.LogWarning("No puedes guardar sin activar el modo edicion.");
+        if (selectedEmployee == null) return;
+
+        // Limpiar salario (por si lleva simbolo €)
+        string cleanSalary = salaryInput.text.Replace("€", "").Trim();
+        float salaryParsed = float.Parse(cleanSalary);
+
+        Employee updated = new Employee(
+            selectedEmployee.Id,
+            nameInput.text,
+            int.Parse(positionIdInput.text), //poder escribir numeros en un input field
+            salaryParsed,
+            emailInput.text,
+            selectedEmployee.Photo, // null de momento
+            int.Parse(storeIdInput.text)
+        );
+
+        dbManager.UpdateEmployee(updated);
+        ClosePopup();
+        LoadEmployees();
     }
-}
 
+    public void HandleGuardar()
+    {
+        Debug.Log("info GUARDADA");
+        if (isInAddMode)
+        {
+            SaveNewEmployee();
+        }
+        else if (isEditEnabled)
+        {
+            EditSelectedEmployee();
+        }
+        else
+        {
+            Debug.LogWarning("No puedes guardar sin activar el modo edicion.");
+        }
+    }
 
+    //con este metodo los input fields de nuestro PopUp se podras activar y asi editarlos, cuando s ele da al boton editar
+    public void EnableEditMode()
+    {
+        isEditEnabled = true;
 
+        // Activar todos los campos para que ya se puedan rellenar
+        nameInput.interactable = true;
+        positionIdInput.interactable = true;
+        salaryInput.interactable = true;
+        emailInput.interactable = true;
+        storeIdInput.interactable = true;
 
-//con este metodo los input fields de nuestro PopUp se podras activar y asi editarlos, cuando s ele da al boton editar
-public void EnableEditMode()
-{
-    isEditEnabled = true;
-
-    // Activar todos los campos para que ya se puedan rellenar
-    nameInput.interactable = true;
-    positionIdInput.interactable = true;
-    salaryInput.interactable = true;
-    emailInput.interactable = true;
-    storeIdInput.interactable = true;
-
-    //esto tiene sentido porque no s epeude guardar infromacion si no se ha editado nada
-    buttonGuardar.SetActive(true);
-}
-
-
+        //esto tiene sentido porque no s epeude guardar infromacion si no se ha editado nada
+        buttonGuardar.SetActive(true);
+    }
 
     public void DeleteSelectedEmployee()
     {
-        DatabaseManager.DeleteEmployee(selectedEmployee.Id);
+        dbManager.DeleteEmployee(selectedEmployee.Id);
         ClosePopup();
         LoadEmployees();
     }
 
     public void ClosePopup()
-{
-    addEmployeePanel.SetActive(false);
-    uiOutsidePopup.SetActive(true); //activamos los botones
-
-}
+    {
+        addEmployeePanel.SetActive(false);
+        uiOutsidePopup.SetActive(true); //activamos los botones
+    }
 
 }

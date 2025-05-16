@@ -1,4 +1,4 @@
-public class Customer 
+public class Customer
 {
     public int Id;
     public string Name;
@@ -21,5 +21,10 @@ public class Customer
         Email = email;
         PhoneNumber = phoneNumber;
         Address = address;
+    }
+
+    public override string ToString()
+    {
+        return $"ID: {Id}, Name: {Name}, Email: {Email}, Address = {Address};";
     }
 }

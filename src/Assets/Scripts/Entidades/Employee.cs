@@ -19,13 +19,17 @@ public class Employee
         StoreId = storeId;
     }
 
-    public Employee( string name, int positionId, float salary, string email, int storeId)
+    public Employee(string name, int positionId, float salary, string email, int storeId)
     {
-  
+
         Name = name;
         PositionId = positionId;
         Salary = salary;
         Email = email;
         StoreId = storeId;
+    }
+    public override string ToString()
+    {
+        return $"ID: {Id}, Name: {Name}, PositionId = {PositionId}, Salary = {Salary}, Email: {Email}, Photo: {Photo}, StoreId = {StoreId};";
     }
 }

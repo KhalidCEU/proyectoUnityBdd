@@ -39,8 +39,11 @@ public class CustomerManager : MonoBehaviour
     private Customer selectedCustomer;
     private List<Customer> allCustomers = new List<Customer>();
 
+    private DbManager dbManager;
+
     void Start()
     {
+        dbManager = FindObjectOfType<DbManager>();
         LoadCustomers();
         searchInput.onValueChanged.AddListener(OnSearchChanged);
         searchInput.onSubmit.AddListener(delegate { OnSearchButtonClicked(); });
@@ -48,7 +51,14 @@ public class CustomerManager : MonoBehaviour
 
     public void LoadCustomers()
     {
-        allCustomers = DatabaseManager.GetAllCustomers();
+        allCustomers = dbManager.GetAllCustomers();
+
+        Debug.Log("Customers count: " + allCustomers.Count);
+        foreach (var customer in allCustomers)
+        {
+            Debug.Log(customer);
+        }
+
         DisplayCustomers(allCustomers);
     }
 
@@ -121,7 +131,7 @@ public class CustomerManager : MonoBehaviour
         );
 
         AddCustomerToScrollView(newCustomer);
-        //DatabaseManager.AddCustomer(newCustomer);
+        dbManager.AddCustomer(newCustomer);
         addCustomerPanel.SetActive(false);
         uiOutsidePopup.SetActive(true);
     }
@@ -193,7 +203,7 @@ public class CustomerManager : MonoBehaviour
             addressInput.text
         );
 
-        DatabaseManager.UpdateCustomer(updated);
+        dbManager.UpdateCustomer(updated);
         ClosePopup();
         LoadCustomers();
     }
@@ -229,7 +239,7 @@ public class CustomerManager : MonoBehaviour
 
     public void DeleteSelectedCustomer()
     {
-        DatabaseManager.DeleteCustomer(selectedCustomer.Id);
+        dbManager.DeleteCustomer(selectedCustomer.Id);
         ClosePopup();
         LoadCustomers();
     }
