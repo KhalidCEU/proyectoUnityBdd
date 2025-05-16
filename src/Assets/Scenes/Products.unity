@@ -1661,10 +1661,8 @@ MonoBehaviour:
   buttonEditar: {fileID: 1295608321}
   buttonGuardar: {fileID: 276524048}
   scrollContentContainer: {fileID: 27820463}
-  productLinePrefab: {fileID: 4333724668380949809, guid: d115ccfc4dc34f04ab9550fe1d0072a0, type: 3}
   searchInput: {fileID: 2034070805}
-  contentContainer: {fileID: 27820463}
-  productItemPrefab: {fileID: 4333724668380949809, guid: f89baea6342377f4bb384c88e0464f9b, type: 3}
+  productItemPrefab: {fileID: 0}
   nameInput: {fileID: 282198970}
   categoryIdInput: {fileID: 944229844}
   priceInput: {fileID: 820771933}

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System.Linq;
 using UnityEngine.SceneManagement;
 
 public class CustomerManager : MonoBehaviour
@@ -13,10 +12,7 @@ public class CustomerManager : MonoBehaviour
     public GameObject buttonGuardar;
 
     public Transform scrollContentContainer;
-    public GameObject customerLinePrefab;
-
     public TMP_InputField searchInput;
-    public Transform contentContainer;
     public GameObject customerItemPrefab;
 
     public TMP_InputField nameInput;
@@ -24,26 +20,19 @@ public class CustomerManager : MonoBehaviour
     public TMP_InputField phoneInput;
     public TMP_InputField addressInput;
 
-    public GameObject detailPopup;
-    public TMP_Text detailNameText;
-    public TMP_Text detailEmailText;
-    public TMP_Text detailPhoneText;
-    public TMP_Text detailAddressText;
-
     public GameObject uiOutsidePopup;
-
 
     private bool isInAddMode = false;
     private bool isEditEnabled = false;
 
     private Customer selectedCustomer;
     private List<Customer> allCustomers = new List<Customer>();
-
     private DbManager dbManager;
 
     void Start()
     {
-        dbManager = FindObjectOfType<DbManager>();
+        dbManager = FindFirstObjectByType<DbManager>(); //esyo es mas rapido para unity 
+
         LoadCustomers();
         searchInput.onValueChanged.AddListener(OnSearchChanged);
         searchInput.onSubmit.AddListener(delegate { OnSearchButtonClicked(); });
@@ -52,25 +41,20 @@ public class CustomerManager : MonoBehaviour
     public void LoadCustomers()
     {
         allCustomers = dbManager.GetAllCustomers();
-
-        Debug.Log("Customers count: " + allCustomers.Count);
-        foreach (var customer in allCustomers)
-        {
-            Debug.Log(customer);
-        }
-
         DisplayCustomers(allCustomers);
     }
 
     void DisplayCustomers(List<Customer> customers)
     {
-        foreach (Transform child in contentContainer)
+        foreach (Transform child in scrollContentContainer)
             Destroy(child.gameObject);
 
         foreach (Customer c in customers)
         {
-            GameObject item = Instantiate(customerItemPrefab, contentContainer);
+            GameObject item = Instantiate(customerItemPrefab, scrollContentContainer);
             item.GetComponent<CustomerItemUI>().Setup(c, this);
+            item.GetComponent<RectTransform>().localScale = Vector3.one;
+            item.SetActive(true);
         }
     }
 
@@ -86,15 +70,10 @@ public class CustomerManager : MonoBehaviour
         foreach (Transform child in scrollContentContainer)
         {
             TMP_Text text = child.GetComponentInChildren<TMP_Text>();
-
             if (text != null && text.text.ToLower().Contains(lowerTerm))
-            {
                 child.gameObject.SetActive(true);
-            }
             else
-            {
                 child.gameObject.SetActive(false);
-            }
         }
     }
 
@@ -130,41 +109,12 @@ public class CustomerManager : MonoBehaviour
             addressInput.text
         );
 
-        AddCustomerToScrollView(newCustomer);
         dbManager.AddCustomer(newCustomer);
+        allCustomers = dbManager.GetAllCustomers();
+        DisplayCustomers(allCustomers);
+
         addCustomerPanel.SetActive(false);
         uiOutsidePopup.SetActive(true);
-    }
-
-    private void AddCustomerToScrollView(Customer customer)
-    {
-        GameObject item = Instantiate(customerLinePrefab, scrollContentContainer);
-        TMP_Text text = item.GetComponentInChildren<TMP_Text>();
-        text.text = $"{customer.Id}. Name: {customer.Name}, Email: {customer.Email}";
-
-        Button btn = item.GetComponent<Button>();
-        if (btn != null)
-        {
-            btn.onClick.AddListener(() => {
-                OpenDetailPopup(customer);
-                OpenDetailPopupFromButton();
-            });
-        }
-    }
-
-    private Customer customerToShow;
-
-    public void SetCustomerToShow(Customer c)
-    {
-        customerToShow = c;
-    }
-
-    public void OpenDetailPopupFromButton()
-    {
-        if (customerToShow != null)
-        {
-            OpenDetailPopup(customerToShow);
-        }
     }
 
     public void OpenDetailPopup(Customer c)

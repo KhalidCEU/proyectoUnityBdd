@@ -14,14 +14,14 @@ public class EmployeeManager : MonoBehaviour
     public GameObject buttonGuardar;
 
     //para el scrollview
-    public Transform scrollContentContainer; // donde instanciaras los items
-    public GameObject employeeLinePrefab;    // tu prefab tipo linea de texto
+    public Transform scrollContentContainer; // donde instanciaras los prefabs e items 
+    //public GameObject employeeLinePrefab;    // tu prefab tipo linea de texto
 
 
 
     // Referencias UI generales
     public TMP_InputField searchInput;
-    public Transform contentContainer;
+    //public Transform contentContainer;
     public GameObject employeeItemPrefab;
 
     // Campos del formulario del popup
@@ -47,13 +47,13 @@ public class EmployeeManager : MonoBehaviour
     private bool isEditEnabled = false;
 
     private Employee selectedEmployee;
-    private List<Employee> allEmployees = new List<Employee>();
+    private List<Employee> allEmployees = new List<Employee>(); //que cargue empelados en el prefab de la base de datos , nameText con metodo LoadEmployees y la lista AllEmployees
 
     private DbManager dbManager;
 
     void Start()
     {
-        dbManager = FindObjectOfType<DbManager>();
+        dbManager = FindFirstObjectByType<DbManager>(); //este es mas rapido y mejor para unity 
         LoadEmployees();
         searchInput.onValueChanged.AddListener(OnSearchChanged);
         searchInput.onSubmit.AddListener(delegate { OnSearchButtonClicked(); }); //para que el enter en dl input field de buscar funciona como la lupa
@@ -63,27 +63,43 @@ public class EmployeeManager : MonoBehaviour
     {
         allEmployees = dbManager.GetAllEmployees();
 
-        Debug.Log("Employees count: " + allEmployees.Count);
+       /* Debug.Log("Employees count: " + allEmployees.Count);
         foreach (var employee in allEmployees)
         {
             Debug.Log(employee);
-        }
+        }*/
+        
 
         DisplayEmployees(allEmployees);
     }
 
-    void DisplayEmployees(List<Employee> employees)
+    /*void DisplayEmployees(List<Employee> employees)
     {
-        foreach (Transform child in contentContainer)
+        foreach (Transform child in scrollContentContainer)
             Destroy(child.gameObject);
 
         foreach (Employee e in employees)
         {
-            GameObject item = Instantiate(employeeItemPrefab, contentContainer);
+            GameObject item = Instantiate(employeeItemPrefab, scrollContentContainer);
             item.GetComponent<EmployeeItemUI>().Setup(e, this);
 
         }
+    }*/
+
+    void DisplayEmployees(List<Employee> employees)
+{
+    foreach (Transform child in scrollContentContainer)
+        Destroy(child.gameObject);
+
+    foreach (Employee e in employees)
+    {
+        GameObject item = Instantiate(employeeItemPrefab, scrollContentContainer);
+        item.GetComponent<EmployeeItemUI>().Setup(e, this);
+        item.GetComponent<RectTransform>().localScale = Vector3.one; //pone el prefab dentro de la vista
+        item.SetActive(true); //para que siempre se eva el prefab
     }
+}
+
     public void GoBackToMainMenu()
     {
         SceneManager.LoadScene("MainView");
@@ -166,11 +182,15 @@ public class EmployeeManager : MonoBehaviour
             storeId
         );
 
+        dbManager.AddEmployee(newEmp);                     // 1. Lo guardas
+        allEmployees = dbManager.GetAllEmployees();        // 2. Lo recargas con ID correcto
+        DisplayEmployees(allEmployees);                    // 3. Actualizas el scroll
 
-        AddEmployeeToScrollView(newEmp);
-        dbManager.AddEmployee(newEmp);
+
+        /*AddEmployeeToScrollView(newEmp); //perimero instancio en la UI
+        dbManager.AddEmployee(newEmp); //luego guardamos en la base de datos
         addEmployeePanel.SetActive(false);
-        uiOutsidePopup.SetActive(true);
+        uiOutsidePopup.SetActive(true);*/
 
     }
 
@@ -179,7 +199,7 @@ public class EmployeeManager : MonoBehaviour
     private void AddEmployeeToScrollView(Employee employee)
     {
         Debug.Log($"Anadiendo empleado al scroll: {employee.Name}");
-        GameObject item = Instantiate(employeeLinePrefab, scrollContentContainer); //Crea una nueva copia del prefab en el scroll
+        GameObject item = Instantiate(employeeItemPrefab, scrollContentContainer); //Crea una nueva copia del prefab en el scroll
         TMP_Text text = item.GetComponentInChildren<TMP_Text>(); //Busca el texto que muestra el empleado
         text.text = $"{employee.Id}. Name: {employee.Name}, Email: {employee.Email}"; //que solo muestre esto en la escena prinicpal de employees
 
@@ -189,7 +209,7 @@ public class EmployeeManager : MonoBehaviour
             // boton para que el prefab sea clicable
             btn.onClick.AddListener(() => {
                 OpenDetailPopup(employee);  //sale el popup con su infromacion
-                OpenDetailPopupFromButton();
+                //OpenDetailPopupFromButton();
             });
         }
     }

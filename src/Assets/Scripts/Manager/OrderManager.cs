@@ -15,11 +15,11 @@ public class OrderManager : MonoBehaviour
 
     // ScrollView
     public Transform scrollContentContainer;
-    public GameObject orderLinePrefab;
+    //public GameObject orderLinePrefab;
 
     // Referencias UI generales
     public TMP_InputField searchInput;
-    public Transform contentContainer;
+    //public Transform contentContainer;
     public GameObject orderItemPrefab;
 
     // Campos del formulario del popup
@@ -56,12 +56,12 @@ public class OrderManager : MonoBehaviour
 
     void DisplayOrders(List<Order> orders)
     {
-        foreach (Transform child in contentContainer)
+        foreach (Transform child in scrollContentContainer)
             Destroy(child.gameObject);
 
         foreach (Order o in orders)
         {
-            GameObject item = Instantiate(orderItemPrefab, contentContainer);
+            GameObject item = Instantiate(orderItemPrefab, scrollContentContainer);
             item.GetComponent<OrderItemUI>().Setup(o, this);
         }
     }
@@ -129,14 +129,14 @@ public class OrderManager : MonoBehaviour
         Order newOrder = new Order(dateInput.text, customerId, totalAmount);
 
         AddOrderToScrollView(newOrder);
-        //DatabaseManager.AddOrder(newOrder);
+        DatabaseManager.AddOrder(newOrder);
         addOrderPanel.SetActive(false);
         uiOutsidePopup.SetActive(true);
     }
 
     private void AddOrderToScrollView(Order order)
     {
-        GameObject item = Instantiate(orderLinePrefab, scrollContentContainer);
+        GameObject item = Instantiate(orderItemPrefab, scrollContentContainer);
         TMP_Text text = item.GetComponentInChildren<TMP_Text>();
         text.text = $"{order.Id}. Date: {order.Date}, Customer Id: {order.CustomerId}";
 

@@ -13,11 +13,11 @@ public class ProductManager : MonoBehaviour
     public GameObject buttonGuardar;
 
     public Transform scrollContentContainer;
-    public GameObject productLinePrefab;
+    //public GameObject productLinePrefab;
 
 
     public TMP_InputField searchInput;
-    public Transform contentContainer;
+    //public Transform contentContainer;
     public GameObject productItemPrefab;
 
     public TMP_InputField nameInput;
@@ -48,12 +48,12 @@ public class ProductManager : MonoBehaviour
 
     void DisplayProducts(List<Product> products)
     {
-        foreach (Transform child in contentContainer)
+        foreach (Transform child in scrollContentContainer)
             Destroy(child.gameObject);
 
         foreach (Product p in products)
         {
-            GameObject item = Instantiate(productItemPrefab, contentContainer);
+            GameObject item = Instantiate(productItemPrefab, scrollContentContainer);
             item.GetComponent<ProductItemUI>().Setup(p, this);
         }
     }
@@ -114,7 +114,7 @@ public class ProductManager : MonoBehaviour
         Product newProduct = new Product(nameInput.text, categoryId, price, stock);
 
         AddProductToScrollView(newProduct);
-        // DatabaseManager.AddProduct(newProduct);
+        DatabaseManager.AddProduct(newProduct);
 
         addProductPanel.SetActive(false);
         uiOutsidePopup.SetActive(true);
@@ -122,7 +122,7 @@ public class ProductManager : MonoBehaviour
 
     private void AddProductToScrollView(Product product)
     {
-        GameObject item = Instantiate(productLinePrefab, scrollContentContainer);
+        GameObject item = Instantiate(productItemPrefab, scrollContentContainer);
         TMP_Text text = item.GetComponentInChildren<TMP_Text>();
         text.text = $"{product.Id}. {product.Name}, Category: {product.CategoryId}";
 

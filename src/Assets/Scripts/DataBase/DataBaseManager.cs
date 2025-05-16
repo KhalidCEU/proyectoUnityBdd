@@ -36,27 +36,71 @@ public class DatabaseManager : MonoBehaviour
     // ======================
     // EMPLOYEES
     // ======================
-    public static List<Employee> GetAllEmployees()
+   /* public static List<Employee> GetAllEmployees()
     {
         List<Employee> list = new List<Employee>();
         using (IDbConnection db = GetConnection())
         {
             db.Open();
             var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Employees";
+            cmd.CommandText = "SELECT Id, Name, PositionId, Salary, Email, StoreId FROM Employees";
+            //md.CommandText = "SELECT * FROM Employees";
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    list.Add(new Employee(
+                    var emp = new Employee(
                         reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2),
-                        reader.GetFloat(3), reader.GetString(4), null, reader.GetInt32(6)
-                    ));
+                        reader.GetFloat(3), reader.GetString(4), null, reader.GetInt32(5)
+                    );
+                    Debug.Log("[DB] Empleado leido: " + emp); //quitar despues
+                    list.Add(emp);
                 }
             }
         }
+        Debug.Log("[DB] Total empleados leídos: " + list.Count); //quitar despues
         return list;
+    }*/
+    public static List<Employee> GetAllEmployees()
+{
+    List<Employee> list = new List<Employee>();
+
+    using (IDbConnection db = GetConnection())
+    {
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT Id, Name, PositionId, Salary, Email, StoreId FROM Employees";
+
+        using (var reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                try
+                {
+                    int id = reader.GetInt32(0);
+                    string name = reader.GetString(1);
+                    int positionId = reader.GetInt32(2);
+                    float salary = reader.GetFloat(3);
+                    string email = reader.GetString(4);
+                    int storeId = reader.GetInt32(5);
+
+                    var emp = new Employee(id, name, positionId, salary, email, null, storeId);
+                    Debug.Log("[DB] Empleado leído: " + emp);
+                    list.Add(emp);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError("❌ Error leyendo un empleado: " + ex.Message);
+                }
+            }
+        }
     }
+
+    Debug.Log("✅ Total empleados leídos: " + list.Count);
+    return list;
+}
+
+
 
     public static void AddEmployee(Employee e)
     {
@@ -178,27 +222,44 @@ public class DatabaseManager : MonoBehaviour
     // ======================
     // CUSTOMERS
     // ======================
-    public static List<Customer> GetAllCustomers()
+   public static List<Customer> GetAllCustomers()
+{
+    List<Customer> list = new List<Customer>();
+
+    using (var db = GetConnection())
     {
-        List<Customer> list = new List<Customer>();
-        using (var db = GetConnection())
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT Id, Name, Email, PhoneNumber, Address FROM Customers";
+
+        using (var reader = cmd.ExecuteReader())
         {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Customers";
-            using (var reader = cmd.ExecuteReader())
+            while (reader.Read())
             {
-                while (reader.Read())
+                try
                 {
-                    list.Add(new Customer(
-                        reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
-                        reader.GetString(3), reader.GetString(4)
-                    ));
+                    int id = reader.GetInt32(0);
+                    string name = reader.GetString(1);
+                    string email = reader.GetString(2);
+                    string phone = reader.GetString(3);
+                    string address = reader.GetString(4);
+
+                    var customer = new Customer(id, name, email, phone, address);
+                    Debug.Log("Cliente leído: " + customer);
+                    list.Add(customer);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError(" Error al leer un cliente: " + ex.Message);
                 }
             }
         }
-        return list;
     }
+
+    Debug.Log("Total clientes leídos: " + list.Count);
+    return list;
+}
+
 
     public static void AddCustomer(Customer c)
     {
