@@ -11,7 +11,7 @@ public class DbManager : MonoBehaviour
     private string connString;
     private IDbConnection connection;
 
-    void Start()
+    void Awake()
     {
         string dbPath = Path.Combine(Application.persistentDataPath, dbName);
         Debug.Log("DB path: " + dbPath);
