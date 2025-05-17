@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:src/Assets/ProyectoBAD.unity.meta
+guid: 0587afa4629104c018911d1bb4709d06
+========
 guid: 8c9cfa26abfee488c85f1582747f6a02
+>>>>>>>> origin/dev:src/Assets/Scenes/EmployeesView.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

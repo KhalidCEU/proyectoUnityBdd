@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      APanel - Logo copie_0: 686736888605962593
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -462,6 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a13f1195b2f9b428b8c02ee4ade1915d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dbName: AdminApp.sqlite
 --- !u!1 &109650148
 GameObject:
   m_ObjectHideFlags: 0
