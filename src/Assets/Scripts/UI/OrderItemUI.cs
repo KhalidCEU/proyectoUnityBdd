@@ -11,7 +11,7 @@ public class OrderItemUI : MonoBehaviour
 
     public void Setup(Order order, OrderManager mgr)
     {
-        Debug.Log("Setup() iniciado para Order: " + (order != null ? order.Date : "orden NULL"));
+        // Debug.Log("Setup() iniciado para Order: " + (order != null ? order.Date : "orden NULL"));
 
         orderData = order;
         manager = mgr;
@@ -28,7 +28,7 @@ public class OrderItemUI : MonoBehaviour
         try
         {
             nameText.text = $"{order.Id}. Date: {order.Date} | Customer ID: {order.CustomerId}";
-            Debug.Log("Texto asignado: " + nameText.text);
+            // Debug.Log("Texto asignado: " + nameText.text);
         }
         catch (System.Exception ex)
         {

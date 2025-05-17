@@ -12,7 +12,7 @@ public class EmployeeItemUI : MonoBehaviour
 
     public void Setup(Employee employee, EmployeeManager mgr)
     {
-        Debug.Log(" Setup() iniciado para: " + (employee != null ? employee.Name : "employee NULL"));
+        // Debug.Log(" Setup() iniciado para: " + (employee != null ? employee.Name : "employee NULL"));
 
         employeeData = employee;
         manager = mgr;
@@ -29,7 +29,7 @@ public class EmployeeItemUI : MonoBehaviour
         try
         {
             nameText.text = $"{employee.Id}. {employee.Name}, {employee.Email}";
-            Debug.Log(" Texto asignado: " + nameText.text);
+            // Debug.Log(" Texto asignado: " + nameText.text);
         }
         catch (System.Exception ex)
         {

@@ -31,7 +31,7 @@ public class CustomerManager : MonoBehaviour
 
     void Start()
     {
-        dbManager = FindFirstObjectByType<DbManager>(); //esyo es mas rapido para unity 
+        dbManager = FindFirstObjectByType<DbManager>();
 
         LoadCustomers();
         searchInput.onValueChanged.AddListener(OnSearchChanged);

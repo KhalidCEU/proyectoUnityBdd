@@ -76,7 +76,7 @@ public class ProductManager : MonoBehaviour
         if (text != null)
         {
             text.text = $"{product.Id}. Nombre: {product.Name}, Categoría: {product.CategoryId}";
-            Debug.Log("Texto asignado a prefab: " + text.text);
+            // Debug.Log("Texto asignado a prefab: " + text.text);
         }
 
         Button btn = item.GetComponent<Button>();

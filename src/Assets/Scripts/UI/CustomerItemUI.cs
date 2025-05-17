@@ -11,24 +11,15 @@ public class CustomerItemUI : MonoBehaviour
 
     public void Setup(Customer customer, CustomerManager mgr)
     {
-        Debug.Log(" Setup() iniciado para: " + (customer != null ? customer.Name : "customer NULL"));
+        // Debug.Log(" Setup() iniciado para: " + (customer != null ? customer.Name : "customer NULL"));
 
         customerData = customer;
         manager = mgr;
 
-        if (nameText == null)
-        {
-            Debug.LogError(" nameText está NULL en Setup()");
-        }
-        else
-        {
-            Debug.Log(" nameText no es null");
-        }
-
         try
         {
             nameText.text = $"{customer.Id}. {customer.Name}, {customer.Email}";
-            Debug.Log(" Texto asignado: " + nameText.text);
+            // Debug.Log(" Texto asignado: " + nameText.text);
         }
         catch (System.Exception ex)
         {

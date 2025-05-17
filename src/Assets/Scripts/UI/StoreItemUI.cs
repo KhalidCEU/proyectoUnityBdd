@@ -11,7 +11,7 @@ public class StoreItemUI : MonoBehaviour
 
     public void Setup(Store store, StoreManager mgr)
     {
-        Debug.Log("Setup() iniciado para: " + (store != null ? store.Address : "store NULL"));
+        // Debug.Log("Setup() iniciado para: " + (store != null ? store.Address : "store NULL"));
 
         storeData = store;
         manager = mgr;
@@ -28,7 +28,7 @@ public class StoreItemUI : MonoBehaviour
         try
         {
             nameText.text = $"{store.Id}. {store.Address}";
-            Debug.Log("Texto asignado: " + nameText.text);
+            // Debug.Log("Texto asignado: " + nameText.text);
         }
         catch (System.Exception ex)
         {

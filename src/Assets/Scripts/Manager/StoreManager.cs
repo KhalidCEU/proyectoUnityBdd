@@ -73,7 +73,7 @@ public class StoreManager : MonoBehaviour
         if (text != null)
         {
             text.text = $"{store.Id}. Address: {store.Address}";
-            Debug.Log("Texto asignado a prefab: " + text.text);
+            // Debug.Log("Texto asignado a prefab: " + text.text);
         }
 
         Button btn = item.GetComponent<Button>();
