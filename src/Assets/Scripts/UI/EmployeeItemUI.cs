@@ -1,5 +1,4 @@
-
- using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -38,7 +37,7 @@ public class EmployeeItemUI : MonoBehaviour
 
         try
         {
-            GetComponent<Button>().onClick.AddListener(() => {
+            GetComponentInChildren<Button>().onClick.AddListener(() => {
                 manager.OpenDetailPopup(employeeData);
             });
             Debug.Log(" Botón conectado correctamente.");

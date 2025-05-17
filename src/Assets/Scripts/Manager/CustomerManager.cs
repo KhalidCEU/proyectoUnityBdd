@@ -103,6 +103,7 @@ public class CustomerManager : MonoBehaviour
     public void SaveNewCustomer()
     {
         Customer newCustomer = new Customer(
+          
             nameInput.text,
             emailInput.text,
             phoneInput.text,
@@ -178,6 +179,7 @@ public class CustomerManager : MonoBehaviour
     public void EnableEditMode()
     {
         isEditEnabled = true;
+        isInAddMode = false; 
 
         nameInput.interactable = true;
         emailInput.interactable = true;

@@ -37,7 +37,7 @@ public class OrderItemUI : MonoBehaviour
 
         try
         {
-            GetComponent<Button>().onClick.AddListener(() => {
+            GetComponentInChildren<Button>().onClick.AddListener(() => {
                 manager.OpenDetailPopup(orderData);
             });
             Debug.Log("✅ Botón conectado correctamente.");

@@ -126,7 +126,7 @@ void Start()
         totalAmountInput.text = "";
     }
 
-    public void SaveNewOrder()
+public void SaveNewOrder()
 {
     int customerId;
     float totalAmount;
@@ -145,19 +145,15 @@ void Start()
     }
 
     Order newOrder = new Order(dateInput.text, customerId, totalAmount);
-Debug.Log("dbManager: " + dbManager);
-Debug.Log(" dateInput: " + dateInput);
-Debug.Log(" customerIdInput: " + customerIdInput);
-Debug.Log(" totalAmountInput: " + totalAmountInput);
-
 
     dbManager.AddOrder(newOrder);
-    allOrders = dbManager.GetAllOrders(); // actualizamos con IDs reales
+    allOrders = dbManager.GetAllOrders();
     DisplayOrders(allOrders);
 
     addOrderPanel.SetActive(false);
     uiOutsidePopup.SetActive(true);
 }
+
 
     private void AddOrderToScrollView(Order order)
     {
@@ -235,10 +231,12 @@ Debug.Log(" totalAmountInput: " + totalAmountInput);
     {
         if (isInAddMode)
         {
+            Debug.Log("Añadiendo nuevo pedido...");
             SaveNewOrder();
         }
         else if (isEditEnabled)
         {
+            Debug.Log("Editando pedido existente...");
             EditSelectedOrder();
         }
         else
@@ -250,6 +248,7 @@ Debug.Log(" totalAmountInput: " + totalAmountInput);
     public void EnableEditMode()
     {
         isEditEnabled = true;
+        isInAddMode = false; 
 
         dateInput.interactable = true;
         customerIdInput.interactable = true;

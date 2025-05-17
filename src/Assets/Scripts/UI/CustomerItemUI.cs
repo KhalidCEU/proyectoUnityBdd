@@ -28,7 +28,7 @@ public class CustomerItemUI : MonoBehaviour
 
         try
         {
-            GetComponent<Button>().onClick.AddListener(() => {
+            GetComponentInChildren<Button>().onClick.AddListener(() => {
                 manager.OpenDetailPopup(customerData);
             });
             Debug.Log(" Botón conectado correctamente.");

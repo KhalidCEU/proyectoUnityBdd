@@ -37,7 +37,7 @@ public class StoreItemUI : MonoBehaviour
 
         try
         {
-            GetComponent<Button>().onClick.AddListener(() => {
+            GetComponentInChildren<Button>().onClick.AddListener(() => {
                 manager.OpenDetailPopup(storeData);
             });
             Debug.Log("Botón conectado correctamente.");

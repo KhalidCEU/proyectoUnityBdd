@@ -19,7 +19,7 @@ public class ProductItemUI : MonoBehaviour
             nameText.text = $"{product.Id}. {product.Name}, Category: {product.CategoryId}";
         }
 
-        Button btn = GetComponent<Button>();
+        Button btn = GetComponentInChildren<Button>();
         if (btn != null)
         {
             btn.onClick.AddListener(() => {
