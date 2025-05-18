@@ -1,55 +1,31 @@
-﻿using UnityEngine;
-using System;
-using System.IO;
-using System.Data;
-using Mono.Data.Sqlite;
 using System.Collections.Generic;
+using UnityEngine;
+using Mono.Data.Sqlite;
+using System.Data;
+using System.IO;
 
-public class DbManager : MonoBehaviour
+public class DatabaseManager : MonoBehaviour
 {
-    private string dbName = "AdminApp.sqlite";
-    private string connString;
-    private IDbConnection connection;
+    private static string dbName = "store.db";
+    private static string dbPath;
 
     void Awake()
     {
-        string dbPath = Path.Combine(Application.persistentDataPath, dbName);
-        Debug.Log("DB path: " + dbPath);
-
-        connString = "URI=file:" + dbPath;
-
-        connection = new SqliteConnection(connString);
-        connection.Open();
-
-        Seeder.CreateTables(connection);
-
-        if (IsTableEmpty(connection, "Employees"))
+        dbPath = Path.Combine(Application.persistentDataPath, dbName);
+        if (!File.Exists(dbPath))
         {
-            Debug.Log("Tables exist but they're empty! Seeding...");
-            Seeder.InsertIntoTables(connection);
-        }
-        else
-        {
-            Debug.Log("DB is already seeded !");
+            TextAsset dbAsset = Resources.Load<TextAsset>("store");
+            File.WriteAllBytes(dbPath, dbAsset.bytes);
         }
     }
 
-    private bool IsTableEmpty(IDbConnection connection, string tableName)
+    private static IDbConnection GetConnection()
     {
-        using (var cmd = connection.CreateCommand())
-        {
-            cmd.CommandText = $"SELECT COUNT(*) FROM {tableName}";
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            return count == 0;
-        }
+        string conn = "URI=file:" + dbPath;
+        return new SqliteConnection(conn);
     }
 
-    private IDbConnection GetConnection()
-    {
-        return new SqliteConnection(connString);
-    }
-
-    private void AddParameter(IDbCommand cmd, string name, object value)
+    private static void AddParameter(IDbCommand cmd, string name, object value)
     {
         IDbDataParameter param = cmd.CreateParameter();
         param.ParameterName = name;
@@ -57,30 +33,52 @@ public class DbManager : MonoBehaviour
         cmd.Parameters.Add(param);
     }
 
-    // ================= EMPLOYEES =================
-    public List<Employee> GetAllEmployees()
+    // ======================
+    // EMPLOYEES
+    // ======================
+
+    public static List<Employee> GetAllEmployees()
+{
+    List<Employee> list = new List<Employee>();
+
+    using (IDbConnection db = GetConnection())
     {
-        List<Employee> list = new List<Employee>();
-        using (var db = GetConnection())
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT Id, Name, PositionId, Salary, Email, StoreId FROM Employees";
+
+        using (var reader = cmd.ExecuteReader())
         {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Employees";
-            using (var reader = cmd.ExecuteReader())
+            while (reader.Read())
             {
-                while (reader.Read())
+                try
                 {
-                    list.Add(new Employee(
-                        reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2),
-                        reader.GetFloat(3), reader.GetString(4), null, reader.GetInt32(6)
-                    ));
+                    int id = reader.GetInt32(0);
+                    string name = reader.GetString(1);
+                    int positionId = reader.GetInt32(2);
+                    float salary = reader.GetFloat(3);
+                    string email = reader.GetString(4);
+                    int storeId = reader.GetInt32(5);
+
+                    var emp = new Employee(id, name, positionId, salary, email, null, storeId);
+                    Debug.Log("[DB] Empleado leído: " + emp);
+                    list.Add(emp);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError(" Error leyendo un empleado: " + ex.Message);
                 }
             }
         }
-        return list;
     }
 
-    public void AddEmployee(Employee e)
+    Debug.Log(" Total empleados leídos: " + list.Count);
+    return list;
+}
+
+
+
+    public static void AddEmployee(Employee e)
     {
         using (var db = GetConnection())
         {
@@ -97,7 +95,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public void DeleteEmployee(int id)
+    public static void DeleteEmployee(int id)
     {
         using (var db = GetConnection())
         {
@@ -109,7 +107,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public void UpdateEmployee(Employee e)
+    public static void UpdateEmployee(Employee e)
     {
         using (var db = GetConnection())
         {
@@ -127,30 +125,46 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    // ================= PRODUCTS =================
-    public List<Product> GetAllProducts()
+    // ======================
+    // PRODUCTS
+    // ======================
+    public static List<Product> GetAllProducts()
+{
+    List<Product> list = new List<Product>();
+
+    using (var db = GetConnection())
     {
-        List<Product> list = new List<Product>();
-        using (var db = GetConnection())
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT Id, Name, CategoryId, Price, Stock FROM Products";
+
+        using (var reader = cmd.ExecuteReader())
         {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Products";
-            using (var reader = cmd.ExecuteReader())
+            while (reader.Read())
             {
-                while (reader.Read())
+                try
                 {
-                    list.Add(new Product(
-                        reader.GetInt32(0), reader.GetString(1),
-                        reader.GetInt32(2), reader.GetFloat(3), reader.GetInt32(4)
-                    ));
+                    var product = new Product(
+                        reader.GetInt32(0),
+                        reader.GetString(1),
+                        reader.GetInt32(2),
+                        reader.GetFloat(3),
+                        reader.GetInt32(4)
+                    );
+                    list.Add(product);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError("Error reading product: " + ex.Message);
                 }
             }
         }
-        return list;
     }
 
-    public void AddProduct(Product p)
+    return list;
+}
+
+    public static void AddProduct(Product p)
     {
         using (var db = GetConnection())
         {
@@ -166,7 +180,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public void DeleteProduct(int id)
+    public static void DeleteProduct(int id)
     {
         using (var db = GetConnection())
         {
@@ -178,7 +192,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public void UpdateProduct(Product p)
+    public static void UpdateProduct(Product p)
     {
         using (var db = GetConnection())
         {
@@ -195,30 +209,49 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    // ================= CUSTOMERS =================
-    public List<Customer> GetAllCustomers()
+    // ======================
+    // CUSTOMERS
+    // ======================
+   public static List<Customer> GetAllCustomers()
+{
+    List<Customer> list = new List<Customer>();
+
+    using (var db = GetConnection())
     {
-        List<Customer> list = new List<Customer>();
-        using (var db = GetConnection())
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT Id, Name, Email, PhoneNumber, Address FROM Customers";
+
+        using (var reader = cmd.ExecuteReader())
         {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Customers";
-            using (var reader = cmd.ExecuteReader())
+            while (reader.Read())
             {
-                while (reader.Read())
+                try
                 {
-                    list.Add(new Customer(
-                        reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
-                        reader.GetString(3), reader.GetString(4)
-                    ));
+                    int id = reader.GetInt32(0);
+                    string name = reader.GetString(1);
+                    string email = reader.GetString(2);
+                    string phone = reader.GetString(3);
+                    string address = reader.GetString(4);
+
+                    var customer = new Customer(id, name, email, phone, address);
+                    Debug.Log("Cliente leído: " + customer);
+                    list.Add(customer);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError(" Error al leer un cliente: " + ex.Message);
                 }
             }
         }
-        return list;
     }
 
-    public void AddCustomer(Customer c)
+    Debug.Log("Total clientes leídos: " + list.Count);
+    return list;
+}
+
+
+    public static void AddCustomer(Customer c)
     {
         using (var db = GetConnection())
         {
@@ -234,7 +267,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public void DeleteCustomer(int id)
+    public static void DeleteCustomer(int id)
     {
         using (var db = GetConnection())
         {
@@ -246,7 +279,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public void UpdateCustomer(Customer c)
+     public static void UpdateCustomer(Customer c)
     {
         using (var db = GetConnection())
         {
@@ -263,30 +296,48 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    // ================= ORDERS =================
-    public List<Order> GetAllOrders()
+    // ======================
+    // ORDERS
+    // ======================
+    public static List<Order> GetAllOrders()
+{
+    List<Order> list = new List<Order>();
+
+    using (var db = GetConnection())
     {
-        List<Order> list = new List<Order>();
-        using (var db = GetConnection())
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT Id, Date, CustomerId, TotalAmount FROM Orders";
+
+        using (var reader = cmd.ExecuteReader())
         {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Orders";
-            using (var reader = cmd.ExecuteReader())
+            while (reader.Read())
             {
-                while (reader.Read())
+                try
                 {
-                    list.Add(new Order(
-                        reader.GetInt32(0), reader[1].ToString(),
-                        reader.GetInt32(2), reader.GetFloat(3)
-                    ));
+                    int id = reader.GetInt32(0);
+                    string date =  reader[1].ToString();
+                    int customerId = reader.GetInt32(2);
+                    float totalAmount = reader.GetFloat(3);
+
+                    var order = new Order(id, date, customerId, totalAmount);
+                    Debug.Log("s Orden leída: " + order);
+                    list.Add(order);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError("Error al leer una orden: " + ex.Message);
                 }
             }
         }
-        return list;
     }
 
-    public void AddOrder(Order o)
+    Debug.Log("Total órdenes leídas: " + list.Count);
+    return list;
+}
+
+
+    public static void AddOrder(Order o)
     {
         using (var db = GetConnection())
         {
@@ -301,7 +352,7 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public void DeleteOrder(int id)
+    public static void DeleteOrder(int id)
     {
         using (var db = GetConnection())
         {
@@ -313,15 +364,15 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public void UpdateOrder(Order o)
+    public static void UpdateOrder(Order o)
     {
         using (var db = GetConnection())
         {
             db.Open();
             var cmd = db.CreateCommand();
             cmd.CommandText = @"UPDATE Orders SET Date = @Date, CustomerId = @CustomerId,
-                                TotalAmount = @TotalAmount WHERE Id = @Id";
-            AddParameter(cmd, "@Date", o.Date);
+                                TotalAmount = @TotalAmount, WHERE Id = @Id";
+            AddParameter(cmd, "@date", o.Date);
             AddParameter(cmd, "@CustomerId", o.CustomerId);
             AddParameter(cmd, "@TotalAmount", o.TotalAmount);
             AddParameter(cmd, "@Id", o.Id);
@@ -329,44 +380,49 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    // ================= STORES =================
-    public List<Store> GetAllStores()
+    // ======================
+    // STORES
+    // ======================
+    public static List<Store> GetAllStores()
+{
+    List<Store> list = new List<Store>();
+    using (var db = GetConnection())
     {
-        List<Store> list = new List<Store>();
-        using (var db = GetConnection())
+        db.Open();
+        var cmd = db.CreateCommand();
+        cmd.CommandText = "SELECT * FROM Stores";
+
+        using (var reader = cmd.ExecuteReader())
         {
-            db.Open();
-            var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT * FROM Stores";
-            using (var reader = cmd.ExecuteReader())
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    list.Add(new Store(
-                        reader.GetInt32(0), reader.GetString(1),
-                        reader.IsDBNull(2) ? -1 : reader.GetInt32(2)
-                    ));
-                }
+                list.Add(new Store(
+                    reader.GetInt32(0),                         // Id
+                    reader.GetString(1),                        // Address
+                    reader.IsDBNull(2) ? -1 : reader.GetInt32(2) // ManagerId (puede ser NULL)
+                ));
             }
         }
-        return list;
     }
+    return list;
+}
 
-    public void AddStore(Store s)
+
+    public static void AddStore(Store s)
     {
         using (var db = GetConnection())
         {
             db.Open();
             var cmd = db.CreateCommand();
-            cmd.CommandText = @"INSERT INTO Stores (Address, ManagerId)
+            cmd.CommandText = @"INSERT INTO Orders (Address, ManagerId)
                                 VALUES (@Address, @ManagerId)";
             AddParameter(cmd, "@Address", s.Address);
-            AddParameter(cmd, "@ManagerId", s.ManagerId);
+            AddParameter(cmd, "@CustomerId", s.ManagerId);
             cmd.ExecuteNonQuery();
         }
     }
 
-    public void DeleteStore(int id)
+    public static void DeleteStore(int id)
     {
         using (var db = GetConnection())
         {
@@ -378,13 +434,13 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public void UpdateStore(Store s)
+    public static void UpdateStore(Store s)
     {
         using (var db = GetConnection())
         {
             db.Open();
             var cmd = db.CreateCommand();
-            cmd.CommandText = @"UPDATE Stores SET Address = @Address, ManagerId = @ManagerId WHERE Id = @Id";
+            cmd.CommandText = @"UPDATE Stores SET Address = @Address, ManagerId = @ManagerId";
             AddParameter(cmd, "@Address", s.Address);
             AddParameter(cmd, "@ManagerId", s.ManagerId);
             AddParameter(cmd, "@Id", s.Id);

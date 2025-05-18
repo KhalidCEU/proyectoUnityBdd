@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5a549a7514f654b77b77338844c03b1d
+guid: c2f3778745f9c834385c42d71ed86a77
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 686736888605962593
-    second: APanel - Logo copie_0
+      213: -3987326448459763357
+    second: emblemunreadable_93487_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: APanel - Logo copie_0
+      name: emblemunreadable_93487_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 402
-        height: 402
+        x: 31
+        y: 31
+        width: 450
+        height: 450
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 161f38bcf87c78900800000000000000
-      internalID: 686736888605962593
+      spriteID: 361390c88bb2aa8c0800000000000000
+      internalID: -3987326448459763357
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      APanel - Logo copie_0: 686736888605962593
+      emblemunreadable_93487_0: -3987326448459763357
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5a549a7514f654b77b77338844c03b1d
+guid: 7f80dd2180cb39141aa9bd3bf818a881
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 686736888605962593
-    second: APanel - Logo copie_0
+      213: 481610261755313144
+    second: searchmagnifierinterfacesymbol1_79893_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: APanel - Logo copie_0
+      name: searchmagnifierinterfacesymbol1_79893_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 402
-        height: 402
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 161f38bcf87c78900800000000000000
-      internalID: 686736888605962593
+      spriteID: 8fbbb1c3bf50fa600800000000000000
+      internalID: 481610261755313144
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      APanel - Logo copie_0: 686736888605962593
+      searchmagnifierinterfacesymbol1_79893_0: 481610261755313144
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
