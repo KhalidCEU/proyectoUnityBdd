@@ -11,40 +11,25 @@ public class StoreItemUI : MonoBehaviour
 
     public void Setup(Store store, StoreManager mgr)
     {
-        // Debug.Log("Setup() iniciado para: " + (store != null ? store.Address : "store NULL"));
-
         storeData = store;
         manager = mgr;
 
         if (nameText == null)
         {
-            Debug.LogError("nameText está NULL en Setup()");
-        }
-        else
-        {
-            Debug.Log("nameText no es null");
+            Debug.LogError("StoreItemUI: nameText reference is missing.");
+            return;
         }
 
-        try
+        nameText.text = $"{store.Id}. {store.Address}";
+
+        var button = GetComponentInChildren<Button>();
+        if (button == null)
         {
-            nameText.text = $"{store.Id}. {store.Address}";
-            // Debug.Log("Texto asignado: " + nameText.text);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Error al asignar texto: " + ex.Message);
+            Debug.LogError("StoreItemUI: Button reference is missing.");
+            return;
         }
 
-        try
-        {
-            GetComponentInChildren<Button>().onClick.AddListener(() => {
-                manager.OpenDetailPopup(storeData);
-            });
-            Debug.Log("Botón conectado correctamente.");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Error asignando el botón: " + ex.Message);
-        }
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => manager.OpenDetailPopup(storeData));
     }
 }

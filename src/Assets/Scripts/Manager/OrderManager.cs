@@ -44,7 +44,7 @@ public class OrderManager : MonoBehaviour
 
     private Order selectedOrder;
     private List<Order> allOrders = new List<Order>();
-    
+
     private DbManager dbManager;
 
 void Start()
@@ -56,7 +56,7 @@ void Start()
         return;
     }
 
-    LoadOrders(); 
+    LoadOrders();
     searchInput.onValueChanged.AddListener(OnSearchChanged);
     searchInput.onSubmit.AddListener(delegate { OnSearchButtonClicked(); });
 }
@@ -167,7 +167,6 @@ public void SaveNewOrder()
         {
             btn.onClick.AddListener(() => {
                 SetOrderToShow(order);
-                
             });
         }
     }
