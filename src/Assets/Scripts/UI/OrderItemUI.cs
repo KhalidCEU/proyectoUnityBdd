@@ -11,40 +11,25 @@ public class OrderItemUI : MonoBehaviour
 
     public void Setup(Order order, OrderManager mgr)
     {
-        // Debug.Log("Setup() iniciado para Order: " + (order != null ? order.Date : "orden NULL"));
-
         orderData = order;
         manager = mgr;
 
         if (nameText == null)
         {
-            Debug.LogError("nameText está NULL en OrderItemUI");
-        }
-        else
-        {
-            Debug.Log("nameText no es null");
+            Debug.LogError("OrderItemUI: nameText reference is missing.");
+            return;
         }
 
-        try
+        nameText.text = $"{order.Id}. Date: {order.Date} | Customer ID: {order.CustomerId}";
+
+        var button = GetComponentInChildren<Button>();
+        if (button == null)
         {
-            nameText.text = $"{order.Id}. Date: {order.Date} | Customer ID: {order.CustomerId}";
-            // Debug.Log("Texto asignado: " + nameText.text);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Error asignando texto: " + ex.Message);
+            Debug.LogError("OrderItemUI: Button reference is missing.");
+            return;
         }
 
-        try
-        {
-            GetComponent<Button>().onClick.AddListener(() => {
-                manager.OpenDetailPopup(orderData);
-            });
-            Debug.Log("✅ Botón conectado correctamente.");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Error asignando el botón: " + ex.Message);
-        }
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => manager.OpenDetailPopup(orderData));
     }
 }

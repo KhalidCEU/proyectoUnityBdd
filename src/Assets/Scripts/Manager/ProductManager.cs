@@ -199,16 +199,28 @@ public class ProductManager : MonoBehaviour
     public void HandleGuardar()
     {
         if (isInAddMode)
+        {
+            Debug.Log("Añadiendo nuevo producto...");
             SaveNewProduct();
-        else if (isEditEnabled)
+        }
+        
+        else if (isEditEnabled) 
+        {
+            Debug.Log("Editando producto existente...");
             EditSelectedProduct();
+        }
+        
         else
+        {
             Debug.LogWarning("No puedes guardar sin activar el modo edición.");
+        }
+            
     }
 
     public void EnableEditMode()
     {
         isEditEnabled = true;
+        isInAddMode = false; 
 
         nameInput.interactable = true;
         categoryIdInput.interactable = true;

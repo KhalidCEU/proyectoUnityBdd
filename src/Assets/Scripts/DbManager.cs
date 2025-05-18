@@ -25,6 +25,7 @@ public class DbManager : MonoBehaviour
 
         if (IsTableEmpty(connection, "Employees"))
         {
+            Debug.Log("Tables exist but they're empty! Seeding...");
             Seeder.InsertIntoTables(connection);
         }
         else

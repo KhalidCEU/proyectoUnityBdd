@@ -17,9 +17,9 @@ public class Seeder
 
         string sqlFileContent = sqlAsset.text;
 
-        Debug.Log("Creating tables...");
+        Debug.Log("Creating tables (if they don't exist)...");
         ExecuteNonQuery(connection, sqlFileContent);
-        Debug.Log("Finished creating tables...");
+        Debug.Log("Finished checking/creating tables...");
     }
 
     public static void InsertIntoTables(IDbConnection connection)

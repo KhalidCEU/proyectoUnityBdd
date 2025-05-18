@@ -127,12 +127,14 @@ public class EmployeeManager : MonoBehaviour
         }
 
         Employee newEmployee = new Employee(
-            nameInput.text,
-            positionId,
-            salary,
-            emailInput.text,
-            storeId
+        0,
+        nameInput.text,
+        positionId,
+        salary,
+        emailInput.text,
+        storeId
         );
+
 
         dbManager.AddEmployee(newEmployee);
         allEmployees = dbManager.GetAllEmployees();
@@ -184,29 +186,38 @@ public class EmployeeManager : MonoBehaviour
         }
 
         Employee updated = new Employee(
-            nameInput.text,
-            positionId,
-            salary,
-            emailInput.text,
-            storeId
+        selectedEmployee.Id,
+        nameInput.text,
+        positionId,
+        salary,
+        emailInput.text,
+        storeId
         );
+
 
         dbManager.UpdateEmployee(updated);
         ClosePopup();
         LoadEmployees();
     }
 
-    public void HandleGuardar()
+   public void HandleGuardar()
+{
+    if (isInAddMode)
     {
-        if (isEditEnabled)
-        {
-            Debug.Log("Editing employee");
-            EditSelectedEmployee();
-        }
-
-        Debug.Log("Saving employee");
+        Debug.Log("Añadiendo nuevo empleado...");
         SaveNewEmployee();
     }
+    else if (isEditEnabled)
+    {
+        Debug.Log("Editando empleado existente...");
+        EditSelectedEmployee();
+    }
+    else
+    {
+        Debug.LogWarning("No estás en modo añadir ni editar.");
+    }
+}
+
 
     public void EnableEditMode()
     {
