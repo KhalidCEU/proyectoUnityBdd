@@ -254,7 +254,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ' <<
+  m_text: '  <
 
 '
   m_isRightToLeft: 0
@@ -7397,7 +7397,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 485853704}
   m_HandleRect: {fileID: 485853703}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
