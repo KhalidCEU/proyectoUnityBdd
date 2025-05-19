@@ -11,31 +11,25 @@ public class CustomerItemUI : MonoBehaviour
 
     public void Setup(Customer customer, CustomerManager mgr)
     {
-        // Debug.Log(" Setup() iniciado para: " + (customer != null ? customer.Name : "customer NULL"));
-
         customerData = customer;
         manager = mgr;
 
-        try
+        if (nameText == null)
         {
-            nameText.text = $"{customer.Id}. {customer.Name}, {customer.Email}";
-            // Debug.Log(" Texto asignado: " + nameText.text);
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError(" Error al asignar texto: " + ex.Message);
+            Debug.LogError("CustomerItemUI: nameText reference is missing.");
+            return;
         }
 
-        try
+        nameText.text = $"{customer.Id}. {customer.Name}, {customer.Email}";
+
+        var button = GetComponentInChildren<Button>();
+        if (button == null)
         {
-            GetComponent<Button>().onClick.AddListener(() => {
-                manager.OpenDetailPopup(customerData);
-            });
-            Debug.Log(" Botón conectado correctamente.");
+            Debug.LogError("CustomerItemUI: Button reference is missing.");
+            return;
         }
-        catch (System.Exception ex)
-        {
-            Debug.LogError(" Error asignando el botón: " + ex.Message);
-        }
+
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => manager.OpenDetailPopup(customerData));
     }
 }

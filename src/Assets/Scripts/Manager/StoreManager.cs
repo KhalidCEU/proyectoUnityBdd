@@ -186,16 +186,28 @@ public class StoreManager : MonoBehaviour
     public void HandleGuardar()
     {
         if (isInAddMode)
+        {
+            Debug.Log("Añadiendo nueva tienda...");
             SaveNewStore();
+        }
+            
         else if (isEditEnabled)
+        {
+            Debug.Log("Editando tienda existente...");
             EditSelectedStore();
+        }
+            
         else
+        {
             Debug.LogWarning("No puedes guardar sin activar el modo edición.");
+        }
+            
     }
 
     public void EnableEditMode()
     {
         isEditEnabled = true;
+        isInAddMode = false;
         addressInput.interactable = true;
         managerIdInput.interactable = true;
         buttonGuardar.SetActive(true);
